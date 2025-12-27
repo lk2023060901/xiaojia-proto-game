@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'proto/**/*.proto'
+      - '*.proto'
   pull_request:
     branches: [main]
     paths:
-      - 'proto/**/*.proto'
+      - '*.proto'
   workflow_dispatch:
 
 permissions:
@@ -43,7 +43,7 @@ jobs:
         run: |
           protoc -I. \
                  --go_out=. --go_opt=module=github.com/lk2023060901/xiaojia-proto-game \
-                 proto/*.proto
+                 *.proto
 
       - name: Run go mod tidy
         run: go mod tidy

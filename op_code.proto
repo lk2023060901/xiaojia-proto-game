@@ -19,4 +19,16 @@ enum OpCode {
   // 客户端认证（Client -> Gateway）
   OP_AUTH_REQ = 1;
   OP_AUTH_RSP = 2;
+
+  // 资源加载完成（Client -> Gateway）
+  OP_LOAD_COMPLETE_REQ = 3;
+  OP_LOAD_COMPLETE_RSP = 4;
+
+  // 心跳（Client <-> Gateway）
+  OP_HEARTBEAT_REQ = 5;
+  OP_HEARTBEAT_RSP = 6;
+
+  // 断线重连（Client -> Gateway）
+  OP_RECONNECT_REQ = 7;
+  OP_RECONNECT_RSP = 8;
 }

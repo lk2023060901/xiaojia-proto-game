@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "err_code.proto";
+
+// ============================================================
+// 资源加载完成
+// ============================================================
+
+// LoadCompleteReq 资源加载完成请求（Client -> Gateway）
+message LoadCompleteReq {}
+
+// LoadCompleteRsp 资源加载完成响应
+message LoadCompleteRsp {}
+
+// ============================================================
+// 心跳
+// ============================================================
+
+// HeartbeatReq 心跳请求（Client -> Gateway）
+message HeartbeatReq {
+  // 客户端时间戳（毫秒）
+  int64 client_time = 1;
+}
+
+// HeartbeatRsp 心跳响应
+message HeartbeatRsp {
+  // 客户端时间戳（毫秒，原样返回）
+  int64 client_time = 1;
+
+  // 服务器时间戳（毫秒）
+  int64 server_time = 2;
+}
+
+// ============================================================
+// 断线重连
+// ============================================================
+
+// ReconnectReq 断线重连请求（Client -> Gateway）
+message ReconnectReq {
+  // 登录获取的 Token
+  string token = 1;
+}
+
+// ReconnectRsp 断线重连响应
+message ReconnectRsp {
+  // 错误码
+  ErrCode code = 1;
+}
