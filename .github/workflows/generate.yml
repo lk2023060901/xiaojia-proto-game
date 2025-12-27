@@ -1,0 +1,70 @@
+name: Generate Protobuf
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'proto/**/*.proto'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'proto/**/*.proto'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Install protoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+          protoc --version
+
+      - name: Install protoc-gen-go
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+
+      - name: Generate protobuf files
+        run: |
+          protoc -I. \
+                 --go_out=. --go_opt=module=github.com/lk2023060901/xiaojia-proto-game \
+                 proto/*.proto
+
+      - name: Run go mod tidy
+        run: go mod tidy
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changes == 'true' && github.event_name == 'push'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add -A
+          git commit -m "chore: auto-generate protobuf files"
+          git push
+
+      - name: Verify build
+        run: go build ./...

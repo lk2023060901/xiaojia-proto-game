@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "proto/err_code.proto";
+
+// AuthReq 客户端认证请求（Client -> Gateway）
+message AuthReq {
+  // 登录获取的 Token
+  string token = 1;
+}
+
+// AuthRsp 认证响应
+message AuthRsp {
+  // 错误码
+  ErrCode code = 1;
+
+  // 错误信息（当 code != ERR_SUCCESS 时）
+  string message = 2;
+}

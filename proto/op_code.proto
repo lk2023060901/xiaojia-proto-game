@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+// OpCode 操作码定义
+//
+// 号段分配规则：
+//   - 每个玩法保留 1000 个号段
+//   - 0-999: 系统保留
+//
+enum OpCode {
+  // ============================================================
+  // 系统保留 (0-999)
+  // ============================================================
+  OP_NONE = 0;
+
+  // 客户端认证（Client -> Gateway）
+  OP_AUTH_REQ = 1;
+  OP_AUTH_RSP = 2;
+}
