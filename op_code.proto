@@ -13,6 +13,9 @@ option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 //   - 2000-2999: 种田系统
 //   - 3000-3999: 商店系统
 //   - 4000-4999: 竞赛系统
+//   - 5000-5999: 排行榜系统
+//   - 6000-6999: 主播系统
+//   - 7000-7999: 关系牌系统
 //
 enum OpCode {
   // ============================================================
@@ -36,6 +39,9 @@ enum OpCode {
   OP_RECONNECT_REQ = 7;     // client.proto, ReconnectReq
   OP_RECONNECT_RSP = 8;     // client.proto, ReconnectRsp
 
+  // 同步玩家模型变化 [S2C]
+  OP_SYNC_PLAYER_MODEL = 9; // player.proto, SyncPlayerModel
+
   // ============================================================
   // 槽位/床位系统 (1000-1999)
   // ============================================================
@@ -46,6 +52,8 @@ enum OpCode {
   OP_SYNC_ANCHOR_SLOT = 1001;  // slot.proto, SyncAnchorSlot
   // 同步床位数值变动 [S2C]
   OP_SYNC_BED_VALUE = 1002;    // bed.proto, SyncBedValue
+  // 同步槽位玩家模型 [S2C]
+  OP_SYNC_SLOT_MODEL = 1003;   // slot.proto, SyncSlotModel
 
   // ============================================================
   // 种田系统 (2000-2999)
@@ -73,4 +81,31 @@ enum OpCode {
   OP_SYNC_COMP_VOTING = 4000;      // competition.proto, SyncCompVoting
   // 同步单项票数变动 [S2C]
   OP_SYNC_COMP_VOTE_UPDATE = 4001; // competition.proto, SyncCompVoteUpdate
+
+  // ============================================================
+  // 排行榜系统 (5000-5999)
+  // ============================================================
+
+  // 获取排行榜请求 [C2S]
+  OP_GET_RANK_REQ = 5000;          // rank.proto, GetRankReq
+  // 同步排行榜数据 [S2C]
+  OP_SYNC_RANK = 5001;             // rank.proto, SyncRank
+
+  // ============================================================
+  // 主播系统 (6000-6999)
+  // ============================================================
+
+  // 同步主播基础信息 [S2C]
+  OP_SYNC_ANCHOR_INFO = 6000;      // anchor.proto, SyncAnchorInfo
+
+  // ============================================================
+  // 关系牌系统 (7000-7999)
+  // ============================================================
+
+  // 同步玩家全量关系列表 [S2C]
+  OP_SYNC_PLAYER_RELATIONSHIPS = 7000; // relationship.proto, SyncPlayerRelationships
+  // 同步单项关系数值更新 [S2C]
+  OP_SYNC_RELATIONSHIP_UPDATE = 7001;  // relationship.proto, SyncRelationshipUpdate
+  // 同步槽位玩家关系标志 [S2C]
+  OP_SYNC_SLOT_RELATIONSHIP = 7002;    // relationship.proto, SyncSlotRelationship
 }

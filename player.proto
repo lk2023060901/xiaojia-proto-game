@@ -5,3 +5,8 @@ package game;
 option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
 import "player_type.proto";
+
+// SyncPlayerModel [S2C] 同步当前玩家本人的模型变化
+message SyncPlayerModel {
+  uint32 model_id = 1;    // 最新模型ID
+}

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "player_type.proto";
+
+// RankType 排行榜类型
+enum RankType {
+  RANK_TYPE_NONE = 0;
+  RANK_FARMING_PROFIT_MAX = 1;      // 种田历史最高收益排行榜
+  RANK_ENERGY_CONSUME_TOTAL = 2;    // 装饰能量累积消耗排行榜
+  RANK_COMPETITION_SCORE = 3;       // 竞赛全服主播积分排行榜
+  RANK_COMP_SIGNUP_CONTRIB = 4;     // [单直播间] 竞赛报名阶段助力贡献排行榜
+  RANK_COMP_PK_CONTRIB = 5;         // [全服] 竞赛PK阶段玩家贡献排行榜
+}
+
+// RankItem 单个排名项信息
+message RankItem {
+  uint32 rank = 1;                  // 排名 (1, 2, 3...)
+  PlayerInfo player = 2;            // 玩家基础信息 (含头像、昵称、VIP、模型ID等)
+  int64 score = 3;                  // 核心数值 (最高收益、累积消耗、助力贡献或PK积分)
+}

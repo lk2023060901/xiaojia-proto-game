@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "relationship_type.proto";
+
+// SyncPlayerRelationships [S2C] 全量同步给玩家本人的关系列表
+message SyncPlayerRelationships {
+  repeated PlayerRelationship relationships = 1;
+}
+
+// SyncRelationshipUpdate [S2C] 增量同步单项数值变动
+message SyncRelationshipUpdate {
+  uint64 partner_uid = 1;         // 对方UID
+  uint32 new_exp = 2;             // 最新经验值
+  uint32 daily_flowers = 3;       // 最新每日鲜花数
+}
+
+// SyncSlotRelationship [S2C] 广播给直播间所有人：同步特定槽位上玩家间的关系标志
+message SyncSlotRelationship {
+  uint32 slot_id = 1;             // 槽位ID
+  RelationshipType type = 2;      // 关系类型
+}

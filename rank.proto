@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "rank_type.proto";
+
+// GetRankReq [C2S] 玩家请求获取特定类型的排行榜
+message GetRankReq {
+  RankType rank_type = 1;
+}
+
+// SyncRank [S2C] 服务端下发/同步排行榜数据
+message SyncRank {
+  RankType rank_type = 1;
+  repeated RankItem items = 2;      // 榜单前 N 名列表
+  RankItem my_rank = 3;             // 玩家自己的当前排名信息
+}

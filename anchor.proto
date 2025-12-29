@@ -5,3 +5,8 @@ package game;
 option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
 import "anchor_type.proto";
+
+// SyncAnchorInfo [S2C] 同步当前主播的详细信息
+message SyncAnchorInfo {
+  AnchorInfo anchor = 1; // 主播详细数据
+}

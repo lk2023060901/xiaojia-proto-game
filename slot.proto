@@ -16,3 +16,10 @@ message SyncAnchorSlots {
 message SyncAnchorSlot {
   SlotInfo slot = 1;              // 变更后的槽位数据
 }
+
+// SyncSlotModel [S2C] 同步特定槽位上的玩家模型变化
+message SyncSlotModel {
+  uint32 slot_id = 1;             // 槽位编号
+  uint64 uid = 2;                  // 玩家UID
+  uint32 model_id = 3;             // 最新模型ID
+}
