@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "player_type.proto";
+
+// FruitOdds 单个水果的实时赔率
+message FruitOdds {
+  uint32 item_id = 1;               // 水果道具ID
+  float multiplier = 2;             // 收购倍数
+}
+
+// FieldState 单个田块的种植状态
+message FieldState {
+  uint32 field_index = 1;           // 田块索引 (1-4)
+  uint32 item_id = 2;               // 已种植水果ID (0为空闲)
+  uint32 count = 3;                 // 种植数量
+}
+
+// FarmingInfo 种田实时业务状态
+message FarmingInfo {
+  repeated FieldState fields = 1;   // 当前玩家在该槽位的4块田详情
+}
+
+// PlayerFarmingInfo 玩家种田信息
+message PlayerFarmingInfo {
+  PlayerInfo player = 1;            // 玩家信息
+  FarmingInfo farming = 2;          // 种田状态
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+// StoreGoodsItem 商店商品静态及动态详情
+message StoreGoodsItem {
+  uint32 goods_id = 1;         // 商品流水ID (对应 StoreItem.xlsx 的 id)
+  uint32 item_id = 2;          // 售卖的道具ID (对应 Item.xlsx)
+  uint32 currency_id = 3;      // 消耗的货币道具ID (如 9001 装饰能量)
+  uint32 price = 4;            // 售卖单价
+  uint32 limit_max = 5;        // 配置的最大限购数量 (0代表不限购)
+  uint32 limit_left = 6;       // 当前玩家剩余可购买数量
+  uint32 refresh_type = 7;     // 刷新类型 (对应枚举 RefreshType)
+  uint32 next_refresh_secs = 8; // 距离下次刷新的剩余秒数
+}

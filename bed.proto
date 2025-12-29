@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "bed_type.proto";
+
+// SyncBedValue [S2C] 同步床位数值(保护值/封印值)变动
+message SyncBedValue {
+  uint32 slot_id = 1;               // 槽位编号
+  BedValueType value_type = 2;      // 数值类型
+  BedOpType op_type = 3;            // 操作类型
+  uint32 value = 4;                 // 变动的数值
+}

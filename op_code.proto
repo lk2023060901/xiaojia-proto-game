@@ -9,6 +9,10 @@ option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 // 号段分配规则：
 //   - 每个玩法保留 1000 个号段
 //   - 0-999: 系统保留
+//   - 1000-1999: 槽位/床位系统
+//   - 2000-2999: 种田系统
+//   - 3000-3999: 商店系统
+//   - 4000-4999: 竞赛系统
 //
 enum OpCode {
   // ============================================================
@@ -17,18 +21,56 @@ enum OpCode {
   OP_NONE = 0;
 
   // 客户端认证（Client -> Gateway）
-  OP_AUTH_REQ = 1;
-  OP_AUTH_RSP = 2;
+  OP_AUTH_REQ = 1;          // auth.proto, AuthReq
+  OP_AUTH_RSP = 2;          // auth.proto, AuthRsp
 
   // 资源加载完成（Client -> Gateway）
-  OP_LOAD_COMPLETE_REQ = 3;
-  OP_LOAD_COMPLETE_RSP = 4;
+  OP_LOAD_COMPLETE_REQ = 3; // client.proto, LoadCompleteReq
+  OP_LOAD_COMPLETE_RSP = 4; // client.proto, LoadCompleteRsp
 
   // 心跳（Client <-> Gateway）
-  OP_HEARTBEAT_REQ = 5;
-  OP_HEARTBEAT_RSP = 6;
+  OP_HEARTBEAT_REQ = 5;     // client.proto, HeartbeatReq
+  OP_HEARTBEAT_RSP = 6;     // client.proto, HeartbeatRsp
 
   // 断线重连（Client -> Gateway）
-  OP_RECONNECT_REQ = 7;
-  OP_RECONNECT_RSP = 8;
+  OP_RECONNECT_REQ = 7;     // client.proto, ReconnectReq
+  OP_RECONNECT_RSP = 8;     // client.proto, ReconnectRsp
+
+  // ============================================================
+  // 槽位/床位系统 (1000-1999)
+  // ============================================================
+
+  // 同步所有槽位信息 [S2C]
+  OP_SYNC_ANCHOR_SLOTS = 1000; // slot.proto, SyncAnchorSlots
+  // 同步单个槽位信息 [S2C]
+  OP_SYNC_ANCHOR_SLOT = 1001;  // slot.proto, SyncAnchorSlot
+  // 同步床位数值变动 [S2C]
+  OP_SYNC_BED_VALUE = 1002;    // bed.proto, SyncBedValue
+
+  // ============================================================
+  // 种田系统 (2000-2999)
+  // ============================================================
+
+  // 同步种田轮次信息 [S2C]
+  OP_SYNC_FARMING_ROUND = 2000; // farming.proto, SyncFarmingRound
+  // 同步单个田块变更 [S2C]
+  OP_SYNC_FARMING_FIELD = 2001; // farming.proto, SyncFarmingField
+
+  // ============================================================
+  // 商店系统 (3000-3999)
+  // ============================================================
+
+  // 同步商店完整列表 [S2C]
+  OP_SYNC_STORE_GOODS = 3000;      // store.proto, SyncStoreGoods
+  // 同步单个商品状态 [S2C]
+  OP_SYNC_STORE_GOODS_ITEM = 3001; // store.proto, SyncStoreGoodsItem
+
+  // ============================================================
+  // 竞赛系统 (4000-4999)
+  // ============================================================
+
+  // 同步投票阶段全量信息 [S2C]
+  OP_SYNC_COMP_VOTING = 4000;      // competition.proto, SyncCompVoting
+  // 同步单项票数变动 [S2C]
+  OP_SYNC_COMP_VOTE_UPDATE = 4001; // competition.proto, SyncCompVoteUpdate
 }

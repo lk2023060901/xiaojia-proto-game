@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "farming_type.proto";
+
+// SyncFarmingRound [S2C] 种田轮次信息同步 (包含赔率和倒计时)
+message SyncFarmingRound {
+  repeated FruitOdds odds = 1;      // 4种水果的实时赔率列表
+  uint32 countdown_secs = 2;        // 距离开奖剩余秒数
+}
+
+// SyncFarmingField [S2C] 同步某个槽位上某个玩家某块田的变更
+message SyncFarmingField {
+  uint64 uid = 1;                   // 玩家UID
+  uint32 slot_id = 2;               // 槽位编号 (1-9)
+  FieldState field = 3;             // 变更后的田块状态详情
+}

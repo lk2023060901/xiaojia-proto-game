@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "competition_type.proto";
+
+// SyncCompVoting [S2C] 全量同步竞赛投票阶段数据
+message SyncCompVoting {
+  repeated CompVoteItem items = 1; // 候选奖品列表
+  uint32 countdown_secs = 2;       // 投票剩余秒数
+}
+
+// SyncCompVoteUpdate [S2C] 增量同步票数变动
+message SyncCompVoteUpdate {
+  uint32 option_id = 1;            // 变化的选项编号
+  uint32 vote_count = 2;           // 最新累计票数
+}

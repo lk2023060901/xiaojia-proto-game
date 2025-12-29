@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+// CompVoteItem 竞赛投票候选项
+message CompVoteItem {
+  uint32 option_id = 1;    // 选项编号 (1, 2, 3...)
+  uint32 item_id = 2;      // 奖品道具ID
+  uint32 vote_count = 3;   // 当前累计票数
+}

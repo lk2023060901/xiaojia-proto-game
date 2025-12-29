@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "slot_type.proto";
+
+// [S2C] 全量同步当前主播的所有槽位信息
+message SyncAnchorSlots {
+  repeated SlotInfo slots = 1;    // 9个槽位的数据列表
+}
+
+// [S2C] 增量同步单个槽位的状态变化
+// 用于：切换模式、PK分数跳动、灵气消耗、所有者迁移等
+message SyncAnchorSlot {
+  SlotInfo slot = 1;              // 变更后的槽位数据
+}

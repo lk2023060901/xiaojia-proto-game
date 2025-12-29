@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+// RoleType 角色身份
+enum RoleType {
+  ROLE_UNKNOWN = 0;
+  STREAMER = 1;      // 主播
+  PLAYER = 2;        // 玩家
+}
+
+// PlayerInfo 玩家基础信息
+message PlayerInfo {
+  uint64 uid = 1;                    // 玩家UID
+  string nickname = 2;               // 昵称
+  string avatar_url = 3;             // 头像地址
+  uint32 avatar_frame = 4;           // 头像框ID
+  uint32 chat_bubble = 5;            // 气泡框ID
+  uint32 vip_level = 6;              // VIP等级
+  uint32 vip_exp = 7;                // VIP经验值
+  int64 decor_energy = 8;            // 装饰能量
+  int64 daily_vip_energy_gained = 9; // 今日已领取的VIP额外能量
+  uint32 model_id = 10;              // 角色模型ID
+}

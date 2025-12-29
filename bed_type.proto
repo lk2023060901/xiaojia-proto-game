@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "player_type.proto";
+
+// BedPkInfo 床位PK实时过程数据
+message BedPkInfo {
+  PlayerInfo challenger = 1;              // 挑战者信息
+  int64 owner_score = 2;                  // 所有者积分 (本轮PK获得)
+  int64 challenger_score = 3;             // 挑战者积分
+  uint32 total_countdown = 4;             // PK剩余总时长 (秒)
+  repeated PlayerInfo owner_supporters = 5;      // 所有者支持者列表(刷礼物的用户)
+  repeated PlayerInfo challenger_supporters = 6; // 挑战者支持者列表(刷礼物的用户)
+}
+
+// BedOpType 变化操作类型
+enum BedOpType {
+  BED_OP_ADD = 0;                         // 增加
+  BED_OP_SUB = 1;                         // 减少
+}
+
+// BedValueType 数值类型
+enum BedValueType {
+  BED_VALUE_PROTECTION = 0;               // 保护值
+  BED_VALUE_SEAL = 1;                     // 封印值
+}
+
+// BedInfo 床位实时业务状态
+message BedInfo {
+  int32 aura_current = 1;                 // 槽位当前灵气值
+  uint32 protection_value = 2;            // 保护值 (大于0禁止PK挑战)
+  uint32 seal_value = 3;                  // 封印值 (大于0收益扣除)
+  BedPkInfo pk_info = 4;                  // PK数据 (如果为空则非PK状态)
+}

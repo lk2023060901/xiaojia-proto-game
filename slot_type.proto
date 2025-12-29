@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+import "player_type.proto";
+import "bed_type.proto";
+import "farming_type.proto";
+
+// SlotMode 槽位显示模式
+enum SlotMode {
+  SLOT_MODE_BED = 0;      // 床位模式
+  SLOT_MODE_FARMING = 1;  // 种田模式
+}
+
+// SlotInfo 槽位完整信息包装器
+message SlotInfo {
+  uint32 slot_id = 1;             // 槽位编号 (1-9)
+  PlayerInfo owner = 2;           // 槽位所有者信息
+  repeated PlayerInfo partners = 3; // 共同拥有者列表 (床位共享/种田同步)
+  SlotMode mode = 4;              // 当前显示的模式
+  BedInfo bed_info = 5;           // 床位详细数据 (仅mode=BED有效)
+  FarmingInfo farming_info = 6;   // 种田详细数据 (仅mode=FARMING有效)
+}
