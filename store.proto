@@ -5,6 +5,7 @@ package game;
 option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
 import "store_type.proto";
+import "err_code.proto";
 
 // SyncStoreGoods [S2C] 下发/同步指定商店的所有商品列表
 message SyncStoreGoods {
@@ -17,4 +18,19 @@ message SyncStoreGoodsItem {
   uint32 store_id = 1;         // 商店ID
   uint32 goods_id = 2;         // 商品流水ID
   uint32 limit_left = 3;       // 变更后最新的剩余限购数量
+}
+
+// BuyStoreGoodsReq [C2S] 玩家购买商店道具请求
+message BuyStoreGoodsReq {
+  StoreType store_type = 1;    // 商店类型
+  uint32 goods_id = 2;         // 商品流水ID
+  uint32 count = 3;            // 购买数量
+}
+
+// BuyStoreGoodsRes [S2C] 玩家购买商店道具响应
+message BuyStoreGoodsRes {
+  ErrCode code = 1;            // 错误码
+  StoreType store_type = 2;    // 商店类型
+  uint32 goods_id = 3;         // 商品流水ID
+  uint32 count = 4;            // 购买数量
 }

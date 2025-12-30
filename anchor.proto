@@ -5,8 +5,20 @@ package game;
 option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
 import "anchor_type.proto";
+import "err_code.proto";
 
 // SyncAnchorInfo [S2C] 同步当前主播的详细信息
 message SyncAnchorInfo {
   AnchorInfo anchor = 1; // 主播详细数据
+}
+
+// SwitchAnchorSceneReq [C2S] 主播请求切换场景
+message SwitchAnchorSceneReq {
+  uint32 scene_id = 1;   // 目标场景ID
+}
+
+// SwitchAnchorSceneRes [S2C] 主播切换场景响应
+message SwitchAnchorSceneRes {
+  ErrCode code = 1;      // 错误码
+  uint32 scene_id = 2;   // 切换成功后的场景ID
 }

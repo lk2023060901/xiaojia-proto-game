@@ -4,6 +4,12 @@ package game;
 
 option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
+// StoreType 商店类型
+enum StoreType {
+  STORE_TYPE_NONE = 0;
+  STORE_TYPE_EXCHANGE = 1; // 兑换商店
+}
+
 // StoreGoodsItem 商店商品静态及动态详情
 message StoreGoodsItem {
   uint32 goods_id = 1;         // 商品流水ID (对应 StoreItem.xlsx 的 id)

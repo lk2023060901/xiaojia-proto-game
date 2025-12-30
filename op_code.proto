@@ -27,9 +27,8 @@ enum OpCode {
   OP_AUTH_REQ = 1;          // auth.proto, AuthReq
   OP_AUTH_RSP = 2;          // auth.proto, AuthRsp
 
-  // 资源加载完成（Client -> Gateway）
-  OP_LOAD_COMPLETE_REQ = 3; // client.proto, LoadCompleteReq
-  OP_LOAD_COMPLETE_RSP = 4; // client.proto, LoadCompleteRsp
+  // 资源加载完成通知（Client -> Gateway）
+  OP_CLIENT_LOAD_COMPLETED_NOTIFY = 3; // client.proto, ClientLoadCompletedNotify
 
   // 心跳（Client <-> Gateway）
   OP_HEARTBEAT_REQ = 5;     // client.proto, HeartbeatReq
@@ -41,6 +40,11 @@ enum OpCode {
 
   // 同步玩家模型变化 [S2C]
   OP_SYNC_PLAYER_MODEL = 9; // player.proto, SyncPlayerModel
+
+  // 切换场景请求 [C2S]
+  OP_SWITCH_SCENE_REQ = 10; // auth.proto, SwitchSceneReq
+  // 切换场景响应 [S2C]
+  OP_SWITCH_SCENE_RES = 11; // auth.proto, SwitchSceneRes
 
   // ============================================================
   // 槽位/床位系统 (1000-1999)
@@ -54,6 +58,10 @@ enum OpCode {
   OP_SYNC_BED_VALUE = 1002;    // bed.proto, SyncBedValue
   // 同步槽位玩家模型 [S2C]
   OP_SYNC_SLOT_MODEL = 1003;   // slot.proto, SyncSlotModel
+  // 同步槽位新增人员 [S2C]
+  OP_SYNC_SLOT_ADD_PLAYER = 1004;    // slot.proto, SyncSlotAddPlayer
+  // 同步槽位人员移除 [S2C]
+  OP_SYNC_SLOT_REMOVE_PLAYER = 1005; // slot.proto, SyncSlotRemovePlayer
 
   // ============================================================
   // 种田系统 (2000-2999)
@@ -63,6 +71,10 @@ enum OpCode {
   OP_SYNC_FARMING_ROUND = 2000; // farming.proto, SyncFarmingRound
   // 同步单个田块变更 [S2C]
   OP_SYNC_FARMING_FIELD = 2001; // farming.proto, SyncFarmingField
+  // 种植请求 [C2S]
+  OP_PLANTING_REQ = 2002;       // farming.proto, PlantingReq
+  // 种植响应 [S2C]
+  OP_PLANTING_RES = 2003;       // farming.proto, PlantingRes
 
   // ============================================================
   // 商店系统 (3000-3999)
@@ -72,6 +84,10 @@ enum OpCode {
   OP_SYNC_STORE_GOODS = 3000;      // store.proto, SyncStoreGoods
   // 同步单个商品状态 [S2C]
   OP_SYNC_STORE_GOODS_ITEM = 3001; // store.proto, SyncStoreGoodsItem
+  // 购买商品请求 [C2S]
+  OP_BUY_STORE_GOODS_REQ = 3002;   // store.proto, BuyStoreGoodsReq
+  // 购买商品响应 [S2C]
+  OP_BUY_STORE_GOODS_RES = 3003;   // store.proto, BuyStoreGoodsRes
 
   // ============================================================
   // 竞赛系统 (4000-4999)
@@ -81,6 +97,16 @@ enum OpCode {
   OP_SYNC_COMP_VOTING = 4000;      // competition.proto, SyncCompVoting
   // 同步单项票数变动 [S2C]
   OP_SYNC_COMP_VOTE_UPDATE = 4001; // competition.proto, SyncCompVoteUpdate
+  // 阶段切换同步 [S2C]
+  OP_SYNC_COMP_STAGE = 4002;       // competition.proto, SyncCompStage
+  // 报名助力同步 [S2C]
+  OP_SYNC_COMP_SIGNUP = 4003;      // competition.proto, SyncCompSignup
+  // PK阶段状态全量同步 [S2C]
+  OP_SYNC_COMP_PK = 4004;          // competition.proto, SyncCompPk
+  // PK阵营积分增量同步 [S2C]
+  OP_SYNC_COMP_PK_SCORE = 4005;    // competition.proto, SyncCompPkScore
+  // 结算结果同步 [S2C]
+  OP_SYNC_COMP_SETTLEMENT = 4006;  // competition.proto, SyncCompSettlement
 
   // ============================================================
   // 排行榜系统 (5000-5999)
@@ -97,6 +123,10 @@ enum OpCode {
 
   // 同步主播基础信息 [S2C]
   OP_SYNC_ANCHOR_INFO = 6000;      // anchor.proto, SyncAnchorInfo
+  // 主播切换场景请求 [C2S]
+  OP_SWITCH_ANCHOR_SCENE_REQ = 6001; // anchor.proto, SwitchAnchorSceneReq
+  // 主播切换场景响应 [S2C]
+  OP_SWITCH_ANCHOR_SCENE_RES = 6002; // anchor.proto, SwitchAnchorSceneRes
 
   // ============================================================
   // 关系牌系统 (7000-7999)

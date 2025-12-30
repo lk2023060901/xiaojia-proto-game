@@ -4,9 +4,36 @@ package game;
 
 option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
+import "player_type.proto";
+
+// CompStageType 竞赛阶段类型
+enum CompStageType {
+  COMP_STAGE_NONE = 0;
+  COMP_STAGE_SIGNUP = 1;     // 报名阶段
+  COMP_STAGE_VOTING = 2;     // 投票阶段 (选奖品)
+  COMP_STAGE_PK = 3;         // PK阶段 (抢擂台)
+  COMP_STAGE_SETTLEMENT = 4; // 结算阶段
+}
+
+// CompSide 竞赛 PK 阵营
+enum CompSide {
+  COMP_SIDE_NONE = 0;
+  COMP_SIDE_OWNER = 1;      // 擂主方
+  COMP_SIDE_CHALLENGER = 2; // 挑战者方
+}
+
 // CompVoteItem 竞赛投票候选项
 message CompVoteItem {
   uint32 option_id = 1;    // 选项编号 (1, 2, 3...)
   uint32 item_id = 2;      // 奖品道具ID
   uint32 vote_count = 3;   // 当前累计票数
+}
+
+// CompArenaInfo 竞赛擂台实时状态
+message CompArenaInfo {
+  PlayerInfo owner = 1;             // 当前擂主
+  PlayerInfo challenger = 2;        // 当前挑战者
+  int64 owner_score = 3;            // 擂主积分
+  int64 challenger_score = 4;       // 挑战者积分
+  uint32 pk_countdown = 5;          // 当前这一场PK的无人抢占倒计时
 }

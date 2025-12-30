@@ -5,6 +5,7 @@ package game;
 option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
 import "competition_type.proto";
+import "player_type.proto";
 
 // SyncCompVoting [S2C] 全量同步竞赛投票阶段数据
 message SyncCompVoting {
@@ -16,4 +17,36 @@ message SyncCompVoting {
 message SyncCompVoteUpdate {
   uint32 option_id = 1;            // 变化的选项编号
   uint32 vote_count = 2;           // 最新累计票数
+}
+
+// SyncCompStage [S2C] 阶段切换同步
+message SyncCompStage {
+  CompStageType stage = 1;         // 当前进入的阶段
+  uint32 countdown_secs = 2;       // 该阶段剩余总时长
+}
+
+// SyncCompSignup [S2C] 报名阶段助力同步
+message SyncCompSignup {
+  int64 current_anchor_score = 1;   // 当前主播获得的助力总分
+  uint32 current_rank = 2;          // 当前主播在全服的排名
+}
+
+// SyncCompPk [S2C] PK阶段状态全量同步
+message SyncCompPk {
+  CompArenaInfo arena = 1;         // 擂台详细细节
+}
+
+// SyncCompPkScore [S2C] 增量同步 PK 阵营积分变动
+message SyncCompPkScore {
+  CompSide side = 1;               // 哪一方增加积分
+  int64 current_score = 2;         // 最新的累计总积分
+  int64 add_amount = 3;            // 本次增加的数值
+}
+
+// SyncCompSettlement [S2C] 结算阶段同步
+message SyncCompSettlement {
+  PlayerInfo winner = 1;           // 获胜玩家 (擂主)
+  string winner_anchor_name = 2;   // 获胜主播名称
+  uint32 prize_item_id = 3;        // 主播获得的奖品ID
+  int64 total_energy_cost = 4;     // 本场直播间累积消耗的装饰能量
 }

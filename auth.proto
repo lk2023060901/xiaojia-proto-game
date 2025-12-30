@@ -4,12 +4,22 @@ package game;
 
 option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
-import "proto/err_code.proto";
+import "login_type.proto";
+import "err_code.proto";
 
 // AuthReq 客户端认证请求（Client -> Gateway）
 message AuthReq {
-  // 登录获取的 Token
-  string token = 1;
+  // 登录类型 (来自 common 仓库)
+  common.LoginType login_type = 1;
+  
+  // 登录 Token
+  string token = 2;
+
+  // 主播/玩家 OpenID
+  string open_id = 3;
+
+  // 设备/环境元数据
+  map<string, string> device_metadata = 4;
 }
 
 // AuthRsp 认证响应
@@ -17,6 +27,17 @@ message AuthRsp {
   // 错误码
   ErrCode code = 1;
 
-  // 错误信息（当 code != ERR_SUCCESS 时）
+  // 错误信息
   string message = 2;
+}
+
+// SwitchSceneReq 切换场景请求
+message SwitchSceneReq {
+  uint32 scene_id = 1;
+}
+
+// SwitchSceneRes 切换场景响应
+message SwitchSceneRes {
+  ErrCode code = 1;
+  uint32 scene_id = 2;
 }

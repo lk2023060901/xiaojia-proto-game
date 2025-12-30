@@ -5,6 +5,7 @@ package game;
 option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
 import "slot_type.proto";
+import "farming_type.proto";
 
 // [S2C] 全量同步当前主播的所有槽位信息
 message SyncAnchorSlots {
@@ -22,4 +23,17 @@ message SyncSlotModel {
   uint32 slot_id = 1;             // 槽位编号
   uint64 uid = 2;                  // 玩家UID
   uint32 model_id = 3;             // 最新模型ID
+}
+
+// SyncSlotAddPlayer [S2C] 同步槽位新增人员
+message SyncSlotAddPlayer {
+  uint32 slot_id = 1;              // 槽位编号
+  PlayerFarmingInfo info = 2;      // 玩家详情及种田状态
+  bool is_owner = 3;               // 是否作为所有者加入
+}
+
+// SyncSlotRemovePlayer [S2C] 同步槽位人员离开
+message SyncSlotRemovePlayer {
+  uint32 slot_id = 1;              // 槽位编号
+  uint64 uid = 2;                  // 离开玩家的UID
 }
