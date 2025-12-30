@@ -18,5 +18,5 @@ message PlayerRelationship {
   uint32 level = 2;               // 关系等级
   uint32 exp = 3;                 // 当前关系经验值
   uint32 daily_flowers_sent = 4;  // 今日双方互送鲜花的总数
-  uint64 uid = 5;                 // 对方玩家的UID
+  string uuid = 5;                // 对方玩家的UUID
 }

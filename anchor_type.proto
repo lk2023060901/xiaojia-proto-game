@@ -6,7 +6,7 @@ option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
 // AnchorInfo 主播基础信息
 message AnchorInfo {
-  string anchor_open_id = 1; // 主播OpenID
+  string anchor_uuid = 1;    // 主播UUID
   string avatar_url = 2;     // 主播头像
   string nick_name = 3;      // 主播昵称
   uint32 scene_id = 4;       // 场景ID

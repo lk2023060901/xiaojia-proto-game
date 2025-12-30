@@ -21,7 +21,7 @@ message SyncAnchorSlot {
 // SyncSlotModel [S2C] 同步特定槽位上的玩家模型变化
 message SyncSlotModel {
   uint32 slot_id = 1;             // 槽位编号
-  uint64 uid = 2;                  // 玩家UID
+  string uuid = 2;                 // 玩家UUID
   uint32 model_id = 3;             // 最新模型ID
 }
 
@@ -35,5 +35,5 @@ message SyncSlotAddPlayer {
 // SyncSlotRemovePlayer [S2C] 同步槽位人员离开
 message SyncSlotRemovePlayer {
   uint32 slot_id = 1;              // 槽位编号
-  uint64 uid = 2;                  // 离开玩家的UID
+  string uuid = 2;                 // 离开玩家的UUID
 }

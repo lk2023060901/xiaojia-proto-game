@@ -15,7 +15,7 @@ message SyncFarmingRound {
 
 // SyncFarmingField [S2C] 同步某个槽位上某个玩家某块田的变更
 message SyncFarmingField {
-  uint64 uid = 1;                   // 玩家UID
+  string uuid = 1;                  // 玩家UUID
   uint32 slot_id = 2;               // 槽位编号 (1-9)
   FieldState field = 3;             // 变更后的田块状态详情
 }

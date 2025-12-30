@@ -13,7 +13,7 @@ enum RoleType {
 
 // PlayerInfo 玩家基础信息
 message PlayerInfo {
-  uint64 uid = 1;                    // 玩家UID
+  string uuid = 1;                   // 玩家UUID
   string nickname = 2;               // 昵称
   string avatar_url = 3;             // 头像地址
   uint32 avatar_frame = 4;           // 头像框ID
