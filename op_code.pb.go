@@ -21,7 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// OpCode 操作码定义
+// OpCode 操作码 definition
 //
 // 号段分配规则：
 //   - 每个玩法保留 1000 个号段
@@ -41,8 +41,8 @@ const (
 	// ============================================================
 	OpCode_OP_NONE OpCode = 0
 	// 客户端认证（Client -> Gateway）
-	OpCode_OP_AUTH_REQ OpCode = 1 // auth.proto, AuthReq
-	OpCode_OP_AUTH_RSP OpCode = 2 // auth.proto, AuthRsp
+	OpCode_OP_AUTH_REQ OpCode = 1 // anchor.proto, AuthReq
+	OpCode_OP_AUTH_RSP OpCode = 2 // anchor.proto, AuthRsp
 	// 资源加载完成通知（Client -> Gateway）
 	OpCode_OP_CLIENT_LOAD_COMPLETED_NOTIFY OpCode = 3 // client.proto, ClientLoadCompletedNotify
 	// 心跳（Client <-> Gateway）
@@ -53,10 +53,6 @@ const (
 	OpCode_OP_RECONNECT_RSP OpCode = 8 // client.proto, ReconnectRsp
 	// 同步玩家模型变化 [S2C]
 	OpCode_OP_SYNC_PLAYER_MODEL OpCode = 9 // player.proto, SyncPlayerModel
-	// 切换场景请求 [C2S]
-	OpCode_OP_SWITCH_SCENE_REQ OpCode = 10 // auth.proto, SwitchSceneReq
-	// 切换场景响应 [S2C]
-	OpCode_OP_SWITCH_SCENE_RES OpCode = 11 // auth.proto, SwitchSceneRes
 	// 同步所有槽位信息 [S2C]
 	OpCode_OP_SYNC_ANCHOR_SLOTS OpCode = 1000 // slot.proto, SyncAnchorSlots
 	// 同步单个槽位信息 [S2C]
@@ -129,8 +125,6 @@ var (
 		7:    "OP_RECONNECT_REQ",
 		8:    "OP_RECONNECT_RSP",
 		9:    "OP_SYNC_PLAYER_MODEL",
-		10:   "OP_SWITCH_SCENE_REQ",
-		11:   "OP_SWITCH_SCENE_RES",
 		1000: "OP_SYNC_ANCHOR_SLOTS",
 		1001: "OP_SYNC_ANCHOR_SLOT",
 		1002: "OP_SYNC_BED_VALUE",
@@ -171,8 +165,6 @@ var (
 		"OP_RECONNECT_REQ":                7,
 		"OP_RECONNECT_RSP":                8,
 		"OP_SYNC_PLAYER_MODEL":            9,
-		"OP_SWITCH_SCENE_REQ":             10,
-		"OP_SWITCH_SCENE_RES":             11,
 		"OP_SYNC_ANCHOR_SLOTS":            1000,
 		"OP_SYNC_ANCHOR_SLOT":             1001,
 		"OP_SYNC_BED_VALUE":               1002,
@@ -236,7 +228,7 @@ var File_op_code_proto protoreflect.FileDescriptor
 
 const file_op_code_proto_rawDesc = "" +
 	"\n" +
-	"\rop_code.proto\x12\x04game*\xa2\b\n" +
+	"\rop_code.proto\x12\x04game*\xf0\a\n" +
 	"\x06OpCode\x12\v\n" +
 	"\aOP_NONE\x10\x00\x12\x0f\n" +
 	"\vOP_AUTH_REQ\x10\x01\x12\x0f\n" +
@@ -246,10 +238,7 @@ const file_op_code_proto_rawDesc = "" +
 	"\x10OP_HEARTBEAT_RSP\x10\x06\x12\x14\n" +
 	"\x10OP_RECONNECT_REQ\x10\a\x12\x14\n" +
 	"\x10OP_RECONNECT_RSP\x10\b\x12\x18\n" +
-	"\x14OP_SYNC_PLAYER_MODEL\x10\t\x12\x17\n" +
-	"\x13OP_SWITCH_SCENE_REQ\x10\n" +
-	"\x12\x17\n" +
-	"\x13OP_SWITCH_SCENE_RES\x10\v\x12\x19\n" +
+	"\x14OP_SYNC_PLAYER_MODEL\x10\t\x12\x19\n" +
 	"\x14OP_SYNC_ANCHOR_SLOTS\x10\xe8\a\x12\x18\n" +
 	"\x13OP_SYNC_ANCHOR_SLOT\x10\xe9\a\x12\x16\n" +
 	"\x11OP_SYNC_BED_VALUE\x10\xea\a\x12\x17\n" +

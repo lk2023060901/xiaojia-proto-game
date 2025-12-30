@@ -138,9 +138,7 @@ func (x *SyncFarmingField) GetField() *FieldState {
 // PlantingReq [C2S] 种植请求
 type PlantingReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FieldIndex    uint32                 `protobuf:"varint,1,opt,name=field_index,json=fieldIndex,proto3" json:"field_index,omitempty"` // 田块索引 (1-4)
-	ItemId        uint32                 `protobuf:"varint,2,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`             // 种子道具ID
-	Count         uint32                 `protobuf:"varint,3,opt,name=count,proto3" json:"count,omitempty"`                             // 种植数量
+	Field         *FieldState            `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"` // 种植信息
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -175,34 +173,18 @@ func (*PlantingReq) Descriptor() ([]byte, []int) {
 	return file_farming_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *PlantingReq) GetFieldIndex() uint32 {
+func (x *PlantingReq) GetField() *FieldState {
 	if x != nil {
-		return x.FieldIndex
+		return x.Field
 	}
-	return 0
-}
-
-func (x *PlantingReq) GetItemId() uint32 {
-	if x != nil {
-		return x.ItemId
-	}
-	return 0
-}
-
-func (x *PlantingReq) GetCount() uint32 {
-	if x != nil {
-		return x.Count
-	}
-	return 0
+	return nil
 }
 
 // PlantingRes [S2C] 种植响应
 type PlantingRes struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Code          ErrCode                `protobuf:"varint,1,opt,name=code,proto3,enum=game.ErrCode" json:"code,omitempty"`             // 错误码
-	FieldIndex    uint32                 `protobuf:"varint,2,opt,name=field_index,json=fieldIndex,proto3" json:"field_index,omitempty"` // 田块索引
-	ItemId        uint32                 `protobuf:"varint,3,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`             // 种子道具ID
-	Count         uint32                 `protobuf:"varint,4,opt,name=count,proto3" json:"count,omitempty"`                             // 种植数量
+	Code          ErrCode                `protobuf:"varint,1,opt,name=code,proto3,enum=game.ErrCode" json:"code,omitempty"` // 错误码
+	Field         *FieldState            `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"`                  // 种植成功后的信息
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -244,25 +226,11 @@ func (x *PlantingRes) GetCode() ErrCode {
 	return ErrCode_ERR_SUCCESS
 }
 
-func (x *PlantingRes) GetFieldIndex() uint32 {
+func (x *PlantingRes) GetField() *FieldState {
 	if x != nil {
-		return x.FieldIndex
+		return x.Field
 	}
-	return 0
-}
-
-func (x *PlantingRes) GetItemId() uint32 {
-	if x != nil {
-		return x.ItemId
-	}
-	return 0
-}
-
-func (x *PlantingRes) GetCount() uint32 {
-	if x != nil {
-		return x.Count
-	}
-	return 0
+	return nil
 }
 
 var File_farming_proto protoreflect.FileDescriptor
@@ -276,18 +244,12 @@ const file_farming_proto_rawDesc = "" +
 	"\x10SyncFarmingField\x12\x10\n" +
 	"\x03uid\x18\x01 \x01(\x04R\x03uid\x12\x17\n" +
 	"\aslot_id\x18\x02 \x01(\rR\x06slotId\x12&\n" +
-	"\x05field\x18\x03 \x01(\v2\x10.game.FieldStateR\x05field\"]\n" +
-	"\vPlantingReq\x12\x1f\n" +
-	"\vfield_index\x18\x01 \x01(\rR\n" +
-	"fieldIndex\x12\x17\n" +
-	"\aitem_id\x18\x02 \x01(\rR\x06itemId\x12\x14\n" +
-	"\x05count\x18\x03 \x01(\rR\x05count\"\x80\x01\n" +
+	"\x05field\x18\x03 \x01(\v2\x10.game.FieldStateR\x05field\"5\n" +
+	"\vPlantingReq\x12&\n" +
+	"\x05field\x18\x01 \x01(\v2\x10.game.FieldStateR\x05field\"X\n" +
 	"\vPlantingRes\x12!\n" +
-	"\x04code\x18\x01 \x01(\x0e2\r.game.ErrCodeR\x04code\x12\x1f\n" +
-	"\vfield_index\x18\x02 \x01(\rR\n" +
-	"fieldIndex\x12\x17\n" +
-	"\aitem_id\x18\x03 \x01(\rR\x06itemId\x12\x14\n" +
-	"\x05count\x18\x04 \x01(\rR\x05countB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
+	"\x04code\x18\x01 \x01(\x0e2\r.game.ErrCodeR\x04code\x12&\n" +
+	"\x05field\x18\x02 \x01(\v2\x10.game.FieldStateR\x05fieldB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
 
 var (
 	file_farming_proto_rawDescOnce sync.Once
@@ -314,12 +276,14 @@ var file_farming_proto_goTypes = []any{
 var file_farming_proto_depIdxs = []int32{
 	4, // 0: game.SyncFarmingRound.odds:type_name -> game.FruitOdds
 	5, // 1: game.SyncFarmingField.field:type_name -> game.FieldState
-	6, // 2: game.PlantingRes.code:type_name -> game.ErrCode
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	5, // 2: game.PlantingReq.field:type_name -> game.FieldState
+	6, // 3: game.PlantingRes.code:type_name -> game.ErrCode
+	5, // 4: game.PlantingRes.field:type_name -> game.FieldState
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_farming_proto_init() }

@@ -7,6 +7,7 @@
 package game
 
 import (
+	xiaojia_proto_common "github.com/lk2023060901/xiaojia-proto-common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -21,6 +22,125 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// AuthReq 客户端认证请求（Client -> Gateway）
+type AuthReq struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 登录类型 (来自 common 仓库)
+	LoginType xiaojia_proto_common.LoginType `protobuf:"varint,1,opt,name=login_type,json=loginType,proto3,enum=common.LoginType" json:"login_type,omitempty"`
+	// 登录 Token
+	Token string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	// 主播/玩家 OpenID
+	OpenId string `protobuf:"bytes,3,opt,name=open_id,json=openId,proto3" json:"open_id,omitempty"`
+	// 设备/环境元数据
+	DeviceMetadata map[string]string `protobuf:"bytes,4,rep,name=device_metadata,json=deviceMetadata,proto3" json:"device_metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *AuthReq) Reset() {
+	*x = AuthReq{}
+	mi := &file_anchor_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AuthReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthReq) ProtoMessage() {}
+
+func (x *AuthReq) ProtoReflect() protoreflect.Message {
+	mi := &file_anchor_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthReq.ProtoReflect.Descriptor instead.
+func (*AuthReq) Descriptor() ([]byte, []int) {
+	return file_anchor_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AuthReq) GetLoginType() xiaojia_proto_common.LoginType {
+	if x != nil {
+		return x.LoginType
+	}
+	return xiaojia_proto_common.LoginType(0)
+}
+
+func (x *AuthReq) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *AuthReq) GetOpenId() string {
+	if x != nil {
+		return x.OpenId
+	}
+	return ""
+}
+
+func (x *AuthReq) GetDeviceMetadata() map[string]string {
+	if x != nil {
+		return x.DeviceMetadata
+	}
+	return nil
+}
+
+// AuthRsp 认证响应
+type AuthRsp struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 错误码
+	Code          ErrCode `protobuf:"varint,1,opt,name=code,proto3,enum=game.ErrCode" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AuthRsp) Reset() {
+	*x = AuthRsp{}
+	mi := &file_anchor_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AuthRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthRsp) ProtoMessage() {}
+
+func (x *AuthRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_anchor_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthRsp.ProtoReflect.Descriptor instead.
+func (*AuthRsp) Descriptor() ([]byte, []int) {
+	return file_anchor_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *AuthRsp) GetCode() ErrCode {
+	if x != nil {
+		return x.Code
+	}
+	return ErrCode_ERR_SUCCESS
+}
+
 // SyncAnchorInfo [S2C] 同步当前主播的详细信息
 type SyncAnchorInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -31,7 +151,7 @@ type SyncAnchorInfo struct {
 
 func (x *SyncAnchorInfo) Reset() {
 	*x = SyncAnchorInfo{}
-	mi := &file_anchor_proto_msgTypes[0]
+	mi := &file_anchor_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -43,7 +163,7 @@ func (x *SyncAnchorInfo) String() string {
 func (*SyncAnchorInfo) ProtoMessage() {}
 
 func (x *SyncAnchorInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_anchor_proto_msgTypes[0]
+	mi := &file_anchor_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +176,7 @@ func (x *SyncAnchorInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncAnchorInfo.ProtoReflect.Descriptor instead.
 func (*SyncAnchorInfo) Descriptor() ([]byte, []int) {
-	return file_anchor_proto_rawDescGZIP(), []int{0}
+	return file_anchor_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SyncAnchorInfo) GetAnchor() *AnchorInfo {
@@ -76,7 +196,7 @@ type SwitchAnchorSceneReq struct {
 
 func (x *SwitchAnchorSceneReq) Reset() {
 	*x = SwitchAnchorSceneReq{}
-	mi := &file_anchor_proto_msgTypes[1]
+	mi := &file_anchor_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -88,7 +208,7 @@ func (x *SwitchAnchorSceneReq) String() string {
 func (*SwitchAnchorSceneReq) ProtoMessage() {}
 
 func (x *SwitchAnchorSceneReq) ProtoReflect() protoreflect.Message {
-	mi := &file_anchor_proto_msgTypes[1]
+	mi := &file_anchor_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -101,7 +221,7 @@ func (x *SwitchAnchorSceneReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SwitchAnchorSceneReq.ProtoReflect.Descriptor instead.
 func (*SwitchAnchorSceneReq) Descriptor() ([]byte, []int) {
-	return file_anchor_proto_rawDescGZIP(), []int{1}
+	return file_anchor_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SwitchAnchorSceneReq) GetSceneId() uint32 {
@@ -122,7 +242,7 @@ type SwitchAnchorSceneRes struct {
 
 func (x *SwitchAnchorSceneRes) Reset() {
 	*x = SwitchAnchorSceneRes{}
-	mi := &file_anchor_proto_msgTypes[2]
+	mi := &file_anchor_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -134,7 +254,7 @@ func (x *SwitchAnchorSceneRes) String() string {
 func (*SwitchAnchorSceneRes) ProtoMessage() {}
 
 func (x *SwitchAnchorSceneRes) ProtoReflect() protoreflect.Message {
-	mi := &file_anchor_proto_msgTypes[2]
+	mi := &file_anchor_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -147,7 +267,7 @@ func (x *SwitchAnchorSceneRes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SwitchAnchorSceneRes.ProtoReflect.Descriptor instead.
 func (*SwitchAnchorSceneRes) Descriptor() ([]byte, []int) {
-	return file_anchor_proto_rawDescGZIP(), []int{2}
+	return file_anchor_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SwitchAnchorSceneRes) GetCode() ErrCode {
@@ -168,7 +288,18 @@ var File_anchor_proto protoreflect.FileDescriptor
 
 const file_anchor_proto_rawDesc = "" +
 	"\n" +
-	"\fanchor.proto\x12\x04game\x1a\x11anchor_type.proto\x1a\x0eerr_code.proto\":\n" +
+	"\fanchor.proto\x12\x04game\x1a\x11anchor_type.proto\x1a\x0eerr_code.proto\x1a\x10login_type.proto\"\xf9\x01\n" +
+	"\aAuthReq\x120\n" +
+	"\n" +
+	"login_type\x18\x01 \x01(\x0e2\x11.common.LoginTypeR\tloginType\x12\x14\n" +
+	"\x05token\x18\x02 \x01(\tR\x05token\x12\x17\n" +
+	"\aopen_id\x18\x03 \x01(\tR\x06openId\x12J\n" +
+	"\x0fdevice_metadata\x18\x04 \x03(\v2!.game.AuthReq.DeviceMetadataEntryR\x0edeviceMetadata\x1aA\n" +
+	"\x13DeviceMetadataEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\",\n" +
+	"\aAuthRsp\x12!\n" +
+	"\x04code\x18\x01 \x01(\x0e2\r.game.ErrCodeR\x04code\":\n" +
 	"\x0eSyncAnchorInfo\x12(\n" +
 	"\x06anchor\x18\x01 \x01(\v2\x10.game.AnchorInfoR\x06anchor\"1\n" +
 	"\x14SwitchAnchorSceneReq\x12\x19\n" +
@@ -189,22 +320,29 @@ func file_anchor_proto_rawDescGZIP() []byte {
 	return file_anchor_proto_rawDescData
 }
 
-var file_anchor_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_anchor_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_anchor_proto_goTypes = []any{
-	(*SyncAnchorInfo)(nil),       // 0: game.SyncAnchorInfo
-	(*SwitchAnchorSceneReq)(nil), // 1: game.SwitchAnchorSceneReq
-	(*SwitchAnchorSceneRes)(nil), // 2: game.SwitchAnchorSceneRes
-	(*AnchorInfo)(nil),           // 3: game.AnchorInfo
-	(ErrCode)(0),                 // 4: game.ErrCode
+	(*AuthReq)(nil),                     // 0: game.AuthReq
+	(*AuthRsp)(nil),                     // 1: game.AuthRsp
+	(*SyncAnchorInfo)(nil),              // 2: game.SyncAnchorInfo
+	(*SwitchAnchorSceneReq)(nil),        // 3: game.SwitchAnchorSceneReq
+	(*SwitchAnchorSceneRes)(nil),        // 4: game.SwitchAnchorSceneRes
+	nil,                                 // 5: game.AuthReq.DeviceMetadataEntry
+	(xiaojia_proto_common.LoginType)(0), // 6: common.LoginType
+	(ErrCode)(0),                        // 7: game.ErrCode
+	(*AnchorInfo)(nil),                  // 8: game.AnchorInfo
 }
 var file_anchor_proto_depIdxs = []int32{
-	3, // 0: game.SyncAnchorInfo.anchor:type_name -> game.AnchorInfo
-	4, // 1: game.SwitchAnchorSceneRes.code:type_name -> game.ErrCode
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	6, // 0: game.AuthReq.login_type:type_name -> common.LoginType
+	5, // 1: game.AuthReq.device_metadata:type_name -> game.AuthReq.DeviceMetadataEntry
+	7, // 2: game.AuthRsp.code:type_name -> game.ErrCode
+	8, // 3: game.SyncAnchorInfo.anchor:type_name -> game.AnchorInfo
+	7, // 4: game.SwitchAnchorSceneRes.code:type_name -> game.ErrCode
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_anchor_proto_init() }
@@ -220,7 +358,7 @@ func file_anchor_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_anchor_proto_rawDesc), len(file_anchor_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

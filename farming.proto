@@ -22,15 +22,11 @@ message SyncFarmingField {
 
 // PlantingReq [C2S] 种植请求
 message PlantingReq {
-  uint32 field_index = 1;           // 田块索引 (1-4)
-  uint32 item_id = 2;               // 种子道具ID
-  uint32 count = 3;                 // 种植数量
+  FieldState field = 1;             // 种植信息
 }
 
 // PlantingRes [S2C] 种植响应
 message PlantingRes {
   ErrCode code = 1;                 // 错误码
-  uint32 field_index = 2;           // 田块索引
-  uint32 item_id = 3;               // 种子道具ID
-  uint32 count = 4;                 // 种植数量
+  FieldState field = 2;             // 种植成功后的信息
 }

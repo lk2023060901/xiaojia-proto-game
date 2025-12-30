@@ -4,7 +4,7 @@ package game;
 
 option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
-// OpCode 操作码定义
+// OpCode 操作码 definition
 //
 // 号段分配规则：
 //   - 每个玩法保留 1000 个号段
@@ -24,8 +24,8 @@ enum OpCode {
   OP_NONE = 0;
 
   // 客户端认证（Client -> Gateway）
-  OP_AUTH_REQ = 1;          // auth.proto, AuthReq
-  OP_AUTH_RSP = 2;          // auth.proto, AuthRsp
+  OP_AUTH_REQ = 1;          // anchor.proto, AuthReq
+  OP_AUTH_RSP = 2;          // anchor.proto, AuthRsp
 
   // 资源加载完成通知（Client -> Gateway）
   OP_CLIENT_LOAD_COMPLETED_NOTIFY = 3; // client.proto, ClientLoadCompletedNotify
@@ -40,11 +40,6 @@ enum OpCode {
 
   // 同步玩家模型变化 [S2C]
   OP_SYNC_PLAYER_MODEL = 9; // player.proto, SyncPlayerModel
-
-  // 切换场景请求 [C2S]
-  OP_SWITCH_SCENE_REQ = 10; // auth.proto, SwitchSceneReq
-  // 切换场景响应 [S2C]
-  OP_SWITCH_SCENE_RES = 11; // auth.proto, SwitchSceneRes
 
   // ============================================================
   // 槽位/床位系统 (1000-1999)
