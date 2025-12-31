@@ -30,3 +30,17 @@ message PlantingRes {
   ErrCode code = 1;                 // 错误码
   FieldState field = 2;             // 种植成功后的信息
 }
+
+// SyncPlantingSettlement [S2C] 种田开奖结算 - 主播
+message SyncPlantingSettlement {
+  uint32 slot_id = 1;
+  string uuid = 2;
+  uint32 energy = 3;
+  uint32 item_cfg_id = 4;           // 中奖道具 id
+}
+
+// PlantingSettlementNotify [S2C] 种田开奖结算 - 玩家
+message PlantingSettlementNotify {
+  uint32 energy = 1;
+  int32 item_cfg_id = 2;            // 中奖道具 id
+}

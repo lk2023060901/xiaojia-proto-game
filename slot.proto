@@ -6,10 +6,13 @@ option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 
 import "slot_type.proto";
 import "farming_type.proto";
+import "player_type.proto";
+import "anchor_type.proto";
 
 // [S2C] 全量同步当前主播的所有槽位信息
 message SyncAnchorSlots {
   repeated SlotInfo slots = 1;    // 9个槽位的数据列表
+  AnchorInfo anchor_info = 2;     // 主播信息
 }
 
 // [S2C] 增量同步单个槽位的状态变化
@@ -30,10 +33,47 @@ message SyncSlotAddPlayer {
   uint32 slot_id = 1;              // 槽位编号
   PlayerFarmingInfo info = 2;      // 玩家详情及种田状态
   bool is_owner = 3;               // 是否作为所有者加入
+  SlotAction action = 4;           // 行为
 }
 
 // SyncSlotRemovePlayer [S2C] 同步槽位人员离开
 message SyncSlotRemovePlayer {
   uint32 slot_id = 1;              // 槽位编号
   string uuid = 2;                 // 离开玩家的UUID
+  SlotAction action = 3;           // 行为
+}
+
+// SyncPkGiftCooldown [S2C] PK 送礼倒计时
+message SyncPkGiftCooldown {
+  uint32 cooldown = 1; // 单位：秒
+}
+
+// SyncPkStart [S2C] PK 开始
+message SyncPkStart {
+  PlayerInfo owner = 1;
+  PlayerInfo challenger = 2;
+  uint32 cooldown = 3;        // PK 倒计时
+  uint32 gift_cooldown = 4;   // PK 送礼倒计时
+}
+
+// SyncPkSettlement [S2C] PK 结算
+message SyncPkSettlement {
+  string winner = 1;          // 胜利方的 uuid
+  string owner = 2;           // 床所有者
+  SlotInfo slot = 3;          // 槽位信息
+}
+
+// SyncGift [S2C] 同步送礼
+message SyncGift {
+  uint32 slot_id = 1;
+  string receiver = 2;        // 收礼物的 uuid
+  PlayerInfo sender = 3;      // 送礼人
+  uint32 item_cfg_id = 4;     // 道具 id
+  uint32 item_num = 5;        // 道具数量
+}
+
+// SyncPkScore [S2C] 同步 PK 积分变化
+message SyncPkScore {
+  string uuid = 1;
+  uint32 score = 2;
 }

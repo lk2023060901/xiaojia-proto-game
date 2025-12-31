@@ -77,7 +77,7 @@ func (x *SyncFarmingRound) GetCountdownSecs() uint32 {
 // SyncFarmingField [S2C] 同步某个槽位上某个玩家某块田的变更
 type SyncFarmingField struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Uid           uint64                 `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`                     // 玩家UID
+	Uuid          string                 `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`                    // 玩家UUID
 	SlotId        uint32                 `protobuf:"varint,2,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"` // 槽位编号 (1-9)
 	Field         *FieldState            `protobuf:"bytes,3,opt,name=field,proto3" json:"field,omitempty"`                  // 变更后的田块状态详情
 	unknownFields protoimpl.UnknownFields
@@ -114,11 +114,11 @@ func (*SyncFarmingField) Descriptor() ([]byte, []int) {
 	return file_farming_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *SyncFarmingField) GetUid() uint64 {
+func (x *SyncFarmingField) GetUuid() string {
 	if x != nil {
-		return x.Uid
+		return x.Uuid
 	}
-	return 0
+	return ""
 }
 
 func (x *SyncFarmingField) GetSlotId() uint32 {
@@ -233,6 +233,128 @@ func (x *PlantingRes) GetField() *FieldState {
 	return nil
 }
 
+// SyncPlantingSettlement [S2C] 种田开奖结算 - 主播
+type SyncPlantingSettlement struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SlotId        uint32                 `protobuf:"varint,1,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"`
+	Uuid          string                 `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Energy        uint32                 `protobuf:"varint,3,opt,name=energy,proto3" json:"energy,omitempty"`
+	ItemCfgId     uint32                 `protobuf:"varint,4,opt,name=item_cfg_id,json=itemCfgId,proto3" json:"item_cfg_id,omitempty"` // 中奖道具 id
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SyncPlantingSettlement) Reset() {
+	*x = SyncPlantingSettlement{}
+	mi := &file_farming_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SyncPlantingSettlement) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SyncPlantingSettlement) ProtoMessage() {}
+
+func (x *SyncPlantingSettlement) ProtoReflect() protoreflect.Message {
+	mi := &file_farming_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SyncPlantingSettlement.ProtoReflect.Descriptor instead.
+func (*SyncPlantingSettlement) Descriptor() ([]byte, []int) {
+	return file_farming_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SyncPlantingSettlement) GetSlotId() uint32 {
+	if x != nil {
+		return x.SlotId
+	}
+	return 0
+}
+
+func (x *SyncPlantingSettlement) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
+func (x *SyncPlantingSettlement) GetEnergy() uint32 {
+	if x != nil {
+		return x.Energy
+	}
+	return 0
+}
+
+func (x *SyncPlantingSettlement) GetItemCfgId() uint32 {
+	if x != nil {
+		return x.ItemCfgId
+	}
+	return 0
+}
+
+// PlantingSettlementNotify [S2C] 种田开奖结算 - 玩家
+type PlantingSettlementNotify struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Energy        uint32                 `protobuf:"varint,1,opt,name=energy,proto3" json:"energy,omitempty"`
+	ItemCfgId     int32                  `protobuf:"varint,2,opt,name=item_cfg_id,json=itemCfgId,proto3" json:"item_cfg_id,omitempty"` // 中奖道具 id
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlantingSettlementNotify) Reset() {
+	*x = PlantingSettlementNotify{}
+	mi := &file_farming_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlantingSettlementNotify) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlantingSettlementNotify) ProtoMessage() {}
+
+func (x *PlantingSettlementNotify) ProtoReflect() protoreflect.Message {
+	mi := &file_farming_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlantingSettlementNotify.ProtoReflect.Descriptor instead.
+func (*PlantingSettlementNotify) Descriptor() ([]byte, []int) {
+	return file_farming_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *PlantingSettlementNotify) GetEnergy() uint32 {
+	if x != nil {
+		return x.Energy
+	}
+	return 0
+}
+
+func (x *PlantingSettlementNotify) GetItemCfgId() int32 {
+	if x != nil {
+		return x.ItemCfgId
+	}
+	return 0
+}
+
 var File_farming_proto protoreflect.FileDescriptor
 
 const file_farming_proto_rawDesc = "" +
@@ -240,16 +362,24 @@ const file_farming_proto_rawDesc = "" +
 	"\rfarming.proto\x12\x04game\x1a\x12farming_type.proto\x1a\x0eerr_code.proto\"^\n" +
 	"\x10SyncFarmingRound\x12#\n" +
 	"\x04odds\x18\x01 \x03(\v2\x0f.game.FruitOddsR\x04odds\x12%\n" +
-	"\x0ecountdown_secs\x18\x02 \x01(\rR\rcountdownSecs\"e\n" +
-	"\x10SyncFarmingField\x12\x10\n" +
-	"\x03uid\x18\x01 \x01(\x04R\x03uid\x12\x17\n" +
+	"\x0ecountdown_secs\x18\x02 \x01(\rR\rcountdownSecs\"g\n" +
+	"\x10SyncFarmingField\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\tR\x04uuid\x12\x17\n" +
 	"\aslot_id\x18\x02 \x01(\rR\x06slotId\x12&\n" +
 	"\x05field\x18\x03 \x01(\v2\x10.game.FieldStateR\x05field\"5\n" +
 	"\vPlantingReq\x12&\n" +
 	"\x05field\x18\x01 \x01(\v2\x10.game.FieldStateR\x05field\"X\n" +
 	"\vPlantingRes\x12!\n" +
 	"\x04code\x18\x01 \x01(\x0e2\r.game.ErrCodeR\x04code\x12&\n" +
-	"\x05field\x18\x02 \x01(\v2\x10.game.FieldStateR\x05fieldB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
+	"\x05field\x18\x02 \x01(\v2\x10.game.FieldStateR\x05field\"}\n" +
+	"\x16SyncPlantingSettlement\x12\x17\n" +
+	"\aslot_id\x18\x01 \x01(\rR\x06slotId\x12\x12\n" +
+	"\x04uuid\x18\x02 \x01(\tR\x04uuid\x12\x16\n" +
+	"\x06energy\x18\x03 \x01(\rR\x06energy\x12\x1e\n" +
+	"\vitem_cfg_id\x18\x04 \x01(\rR\titemCfgId\"R\n" +
+	"\x18PlantingSettlementNotify\x12\x16\n" +
+	"\x06energy\x18\x01 \x01(\rR\x06energy\x12\x1e\n" +
+	"\vitem_cfg_id\x18\x02 \x01(\x05R\titemCfgIdB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
 
 var (
 	file_farming_proto_rawDescOnce sync.Once
@@ -263,22 +393,24 @@ func file_farming_proto_rawDescGZIP() []byte {
 	return file_farming_proto_rawDescData
 }
 
-var file_farming_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_farming_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_farming_proto_goTypes = []any{
-	(*SyncFarmingRound)(nil), // 0: game.SyncFarmingRound
-	(*SyncFarmingField)(nil), // 1: game.SyncFarmingField
-	(*PlantingReq)(nil),      // 2: game.PlantingReq
-	(*PlantingRes)(nil),      // 3: game.PlantingRes
-	(*FruitOdds)(nil),        // 4: game.FruitOdds
-	(*FieldState)(nil),       // 5: game.FieldState
-	(ErrCode)(0),             // 6: game.ErrCode
+	(*SyncFarmingRound)(nil),         // 0: game.SyncFarmingRound
+	(*SyncFarmingField)(nil),         // 1: game.SyncFarmingField
+	(*PlantingReq)(nil),              // 2: game.PlantingReq
+	(*PlantingRes)(nil),              // 3: game.PlantingRes
+	(*SyncPlantingSettlement)(nil),   // 4: game.SyncPlantingSettlement
+	(*PlantingSettlementNotify)(nil), // 5: game.PlantingSettlementNotify
+	(*FruitOdds)(nil),                // 6: game.FruitOdds
+	(*FieldState)(nil),               // 7: game.FieldState
+	(ErrCode)(0),                     // 8: game.ErrCode
 }
 var file_farming_proto_depIdxs = []int32{
-	4, // 0: game.SyncFarmingRound.odds:type_name -> game.FruitOdds
-	5, // 1: game.SyncFarmingField.field:type_name -> game.FieldState
-	5, // 2: game.PlantingReq.field:type_name -> game.FieldState
-	6, // 3: game.PlantingRes.code:type_name -> game.ErrCode
-	5, // 4: game.PlantingRes.field:type_name -> game.FieldState
+	6, // 0: game.SyncFarmingRound.odds:type_name -> game.FruitOdds
+	7, // 1: game.SyncFarmingField.field:type_name -> game.FieldState
+	7, // 2: game.PlantingReq.field:type_name -> game.FieldState
+	8, // 3: game.PlantingRes.code:type_name -> game.ErrCode
+	7, // 4: game.PlantingRes.field:type_name -> game.FieldState
 	5, // [5:5] is the sub-list for method output_type
 	5, // [5:5] is the sub-list for method input_type
 	5, // [5:5] is the sub-list for extension type_name
@@ -299,7 +431,7 @@ func file_farming_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_farming_proto_rawDesc), len(file_farming_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

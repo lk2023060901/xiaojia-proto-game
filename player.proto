@@ -7,6 +7,24 @@ option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 import "player_type.proto";
 
 // SyncPlayerModel [S2C] 同步当前玩家本人的模型变化
-message SyncPlayerModel {
-  uint32 model_id = 1;    // 最新模型ID
+message SyncPlayerChangeModel {
+  uint32 slot_id = 1;
+  string uuid = 2;
+  uint32 model_id = 3;    // 最新模型ID
+}
+
+message PlayerChangeModelNotify {
+  uint32 model_id = 1; // 最新模型ID
+}
+
+// SyncPlayerAddEnergy [S2C] 同步玩家能量增加 - 主播
+message SyncPlayerAddEnergy {
+  uint32 slot_id = 1;     // 槽位编号
+  string uuid = 2;        // 玩家UUID
+  int64 energy = 3;       // 本次增加的能量
+}
+
+// PlayerAddEnergyNotify [S2C] 玩家能量增加通知 - 玩家
+message PlayerAddEnergyNotify {
+  int64 energy = 1;       // 本次增加的能量
 }

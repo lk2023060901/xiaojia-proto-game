@@ -21,27 +21,27 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// ClientLoadCompletedNotify 客户端资源加载完成通知（Client -> Gateway）
-type ClientLoadCompletedNotify struct {
+// AnchorLoadCompletedReq 主播资源加载完成请求 [C2S]
+type AnchorLoadCompletedReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ClientLoadCompletedNotify) Reset() {
-	*x = ClientLoadCompletedNotify{}
+func (x *AnchorLoadCompletedReq) Reset() {
+	*x = AnchorLoadCompletedReq{}
 	mi := &file_client_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ClientLoadCompletedNotify) String() string {
+func (x *AnchorLoadCompletedReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ClientLoadCompletedNotify) ProtoMessage() {}
+func (*AnchorLoadCompletedReq) ProtoMessage() {}
 
-func (x *ClientLoadCompletedNotify) ProtoReflect() protoreflect.Message {
+func (x *AnchorLoadCompletedReq) ProtoReflect() protoreflect.Message {
 	mi := &file_client_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -53,9 +53,120 @@ func (x *ClientLoadCompletedNotify) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ClientLoadCompletedNotify.ProtoReflect.Descriptor instead.
-func (*ClientLoadCompletedNotify) Descriptor() ([]byte, []int) {
+// Deprecated: Use AnchorLoadCompletedReq.ProtoReflect.Descriptor instead.
+func (*AnchorLoadCompletedReq) Descriptor() ([]byte, []int) {
 	return file_client_proto_rawDescGZIP(), []int{0}
+}
+
+// AnchorLoadCompletedRsp 主播资源加载完成响应 [S2C]
+type AnchorLoadCompletedRsp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AnchorLoadCompletedRsp) Reset() {
+	*x = AnchorLoadCompletedRsp{}
+	mi := &file_client_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AnchorLoadCompletedRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AnchorLoadCompletedRsp) ProtoMessage() {}
+
+func (x *AnchorLoadCompletedRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_client_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AnchorLoadCompletedRsp.ProtoReflect.Descriptor instead.
+func (*AnchorLoadCompletedRsp) Descriptor() ([]byte, []int) {
+	return file_client_proto_rawDescGZIP(), []int{1}
+}
+
+// PlayerLoadCompletedReq 玩家资源加载完成请求 [C2S]
+type PlayerLoadCompletedReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayerLoadCompletedReq) Reset() {
+	*x = PlayerLoadCompletedReq{}
+	mi := &file_client_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayerLoadCompletedReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayerLoadCompletedReq) ProtoMessage() {}
+
+func (x *PlayerLoadCompletedReq) ProtoReflect() protoreflect.Message {
+	mi := &file_client_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayerLoadCompletedReq.ProtoReflect.Descriptor instead.
+func (*PlayerLoadCompletedReq) Descriptor() ([]byte, []int) {
+	return file_client_proto_rawDescGZIP(), []int{2}
+}
+
+// PlayerLoadCompletedRsp 玩家资源加载完成响应 [S2C]
+type PlayerLoadCompletedRsp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayerLoadCompletedRsp) Reset() {
+	*x = PlayerLoadCompletedRsp{}
+	mi := &file_client_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayerLoadCompletedRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayerLoadCompletedRsp) ProtoMessage() {}
+
+func (x *PlayerLoadCompletedRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_client_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayerLoadCompletedRsp.ProtoReflect.Descriptor instead.
+func (*PlayerLoadCompletedRsp) Descriptor() ([]byte, []int) {
+	return file_client_proto_rawDescGZIP(), []int{3}
 }
 
 // HeartbeatReq 心跳请求（Client -> Gateway）
@@ -69,7 +180,7 @@ type HeartbeatReq struct {
 
 func (x *HeartbeatReq) Reset() {
 	*x = HeartbeatReq{}
-	mi := &file_client_proto_msgTypes[1]
+	mi := &file_client_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -81,7 +192,7 @@ func (x *HeartbeatReq) String() string {
 func (*HeartbeatReq) ProtoMessage() {}
 
 func (x *HeartbeatReq) ProtoReflect() protoreflect.Message {
-	mi := &file_client_proto_msgTypes[1]
+	mi := &file_client_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -94,7 +205,7 @@ func (x *HeartbeatReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HeartbeatReq.ProtoReflect.Descriptor instead.
 func (*HeartbeatReq) Descriptor() ([]byte, []int) {
-	return file_client_proto_rawDescGZIP(), []int{1}
+	return file_client_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *HeartbeatReq) GetClientTime() int64 {
@@ -117,7 +228,7 @@ type HeartbeatRsp struct {
 
 func (x *HeartbeatRsp) Reset() {
 	*x = HeartbeatRsp{}
-	mi := &file_client_proto_msgTypes[2]
+	mi := &file_client_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -129,7 +240,7 @@ func (x *HeartbeatRsp) String() string {
 func (*HeartbeatRsp) ProtoMessage() {}
 
 func (x *HeartbeatRsp) ProtoReflect() protoreflect.Message {
-	mi := &file_client_proto_msgTypes[2]
+	mi := &file_client_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -142,7 +253,7 @@ func (x *HeartbeatRsp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HeartbeatRsp.ProtoReflect.Descriptor instead.
 func (*HeartbeatRsp) Descriptor() ([]byte, []int) {
-	return file_client_proto_rawDescGZIP(), []int{2}
+	return file_client_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *HeartbeatRsp) GetClientTime() int64 {
@@ -170,7 +281,7 @@ type ReconnectReq struct {
 
 func (x *ReconnectReq) Reset() {
 	*x = ReconnectReq{}
-	mi := &file_client_proto_msgTypes[3]
+	mi := &file_client_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -182,7 +293,7 @@ func (x *ReconnectReq) String() string {
 func (*ReconnectReq) ProtoMessage() {}
 
 func (x *ReconnectReq) ProtoReflect() protoreflect.Message {
-	mi := &file_client_proto_msgTypes[3]
+	mi := &file_client_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -195,7 +306,7 @@ func (x *ReconnectReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReconnectReq.ProtoReflect.Descriptor instead.
 func (*ReconnectReq) Descriptor() ([]byte, []int) {
-	return file_client_proto_rawDescGZIP(), []int{3}
+	return file_client_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ReconnectReq) GetToken() string {
@@ -216,7 +327,7 @@ type ReconnectRsp struct {
 
 func (x *ReconnectRsp) Reset() {
 	*x = ReconnectRsp{}
-	mi := &file_client_proto_msgTypes[4]
+	mi := &file_client_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -228,7 +339,7 @@ func (x *ReconnectRsp) String() string {
 func (*ReconnectRsp) ProtoMessage() {}
 
 func (x *ReconnectRsp) ProtoReflect() protoreflect.Message {
-	mi := &file_client_proto_msgTypes[4]
+	mi := &file_client_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -241,7 +352,7 @@ func (x *ReconnectRsp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReconnectRsp.ProtoReflect.Descriptor instead.
 func (*ReconnectRsp) Descriptor() ([]byte, []int) {
-	return file_client_proto_rawDescGZIP(), []int{4}
+	return file_client_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ReconnectRsp) GetCode() ErrCode {
@@ -255,8 +366,11 @@ var File_client_proto protoreflect.FileDescriptor
 
 const file_client_proto_rawDesc = "" +
 	"\n" +
-	"\fclient.proto\x12\x04game\x1a\x0eerr_code.proto\"\x1b\n" +
-	"\x19ClientLoadCompletedNotify\"/\n" +
+	"\fclient.proto\x12\x04game\x1a\x0eerr_code.proto\"\x18\n" +
+	"\x16AnchorLoadCompletedReq\"\x18\n" +
+	"\x16AnchorLoadCompletedRsp\"\x18\n" +
+	"\x16PlayerLoadCompletedReq\"\x18\n" +
+	"\x16PlayerLoadCompletedRsp\"/\n" +
 	"\fHeartbeatReq\x12\x1f\n" +
 	"\vclient_time\x18\x01 \x01(\x03R\n" +
 	"clientTime\"P\n" +
@@ -282,17 +396,20 @@ func file_client_proto_rawDescGZIP() []byte {
 	return file_client_proto_rawDescData
 }
 
-var file_client_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_client_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_client_proto_goTypes = []any{
-	(*ClientLoadCompletedNotify)(nil), // 0: game.ClientLoadCompletedNotify
-	(*HeartbeatReq)(nil),              // 1: game.HeartbeatReq
-	(*HeartbeatRsp)(nil),              // 2: game.HeartbeatRsp
-	(*ReconnectReq)(nil),              // 3: game.ReconnectReq
-	(*ReconnectRsp)(nil),              // 4: game.ReconnectRsp
-	(ErrCode)(0),                      // 5: game.ErrCode
+	(*AnchorLoadCompletedReq)(nil), // 0: game.AnchorLoadCompletedReq
+	(*AnchorLoadCompletedRsp)(nil), // 1: game.AnchorLoadCompletedRsp
+	(*PlayerLoadCompletedReq)(nil), // 2: game.PlayerLoadCompletedReq
+	(*PlayerLoadCompletedRsp)(nil), // 3: game.PlayerLoadCompletedRsp
+	(*HeartbeatReq)(nil),           // 4: game.HeartbeatReq
+	(*HeartbeatRsp)(nil),           // 5: game.HeartbeatRsp
+	(*ReconnectReq)(nil),           // 6: game.ReconnectReq
+	(*ReconnectRsp)(nil),           // 7: game.ReconnectRsp
+	(ErrCode)(0),                   // 8: game.ErrCode
 }
 var file_client_proto_depIdxs = []int32{
-	5, // 0: game.ReconnectRsp.code:type_name -> game.ErrCode
+	8, // 0: game.ReconnectRsp.code:type_name -> game.ErrCode
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -312,7 +429,7 @@ func file_client_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_client_proto_rawDesc), len(file_client_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

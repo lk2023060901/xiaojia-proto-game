@@ -24,10 +24,10 @@ const (
 // AnchorInfo 主播基础信息
 type AnchorInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AnchorOpenId  string                 `protobuf:"bytes,1,opt,name=anchor_open_id,json=anchorOpenId,proto3" json:"anchor_open_id,omitempty"` // 主播OpenID
-	AvatarUrl     string                 `protobuf:"bytes,2,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`            // 主播头像
-	NickName      string                 `protobuf:"bytes,3,opt,name=nick_name,json=nickName,proto3" json:"nick_name,omitempty"`               // 主播昵称
-	SceneId       uint32                 `protobuf:"varint,4,opt,name=scene_id,json=sceneId,proto3" json:"scene_id,omitempty"`                 // 场景ID
+	AnchorUuid    string                 `protobuf:"bytes,1,opt,name=anchor_uuid,json=anchorUuid,proto3" json:"anchor_uuid,omitempty"` // 主播UUID
+	AvatarUrl     string                 `protobuf:"bytes,2,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`    // 主播头像
+	NickName      string                 `protobuf:"bytes,3,opt,name=nick_name,json=nickName,proto3" json:"nick_name,omitempty"`       // 主播昵称
+	SceneId       uint32                 `protobuf:"varint,4,opt,name=scene_id,json=sceneId,proto3" json:"scene_id,omitempty"`         // 场景ID
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -62,9 +62,9 @@ func (*AnchorInfo) Descriptor() ([]byte, []int) {
 	return file_anchor_type_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AnchorInfo) GetAnchorOpenId() string {
+func (x *AnchorInfo) GetAnchorUuid() string {
 	if x != nil {
-		return x.AnchorOpenId
+		return x.AnchorUuid
 	}
 	return ""
 }
@@ -94,10 +94,11 @@ var File_anchor_type_proto protoreflect.FileDescriptor
 
 const file_anchor_type_proto_rawDesc = "" +
 	"\n" +
-	"\x11anchor_type.proto\x12\x04game\"\x89\x01\n" +
+	"\x11anchor_type.proto\x12\x04game\"\x84\x01\n" +
 	"\n" +
-	"AnchorInfo\x12$\n" +
-	"\x0eanchor_open_id\x18\x01 \x01(\tR\fanchorOpenId\x12\x1d\n" +
+	"AnchorInfo\x12\x1f\n" +
+	"\vanchor_uuid\x18\x01 \x01(\tR\n" +
+	"anchorUuid\x12\x1d\n" +
 	"\n" +
 	"avatar_url\x18\x02 \x01(\tR\tavatarUrl\x12\x1b\n" +
 	"\tnick_name\x18\x03 \x01(\tR\bnickName\x12\x19\n" +

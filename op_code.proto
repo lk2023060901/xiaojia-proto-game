@@ -16,6 +16,7 @@ option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 //   - 5000-5999: 排行榜系统
 //   - 6000-6999: 主播系统
 //   - 7000-7999: 关系牌系统
+//   - 8000-8999: 播报系统
 //
 enum OpCode {
   // ============================================================
@@ -27,8 +28,9 @@ enum OpCode {
   OP_AUTH_REQ = 1;          // anchor.proto, AuthReq
   OP_AUTH_RSP = 2;          // anchor.proto, AuthRsp
 
-  // 资源加载完成通知（Client -> Gateway）
-  OP_CLIENT_LOAD_COMPLETED_NOTIFY = 3; // client.proto, ClientLoadCompletedNotify
+  // 主播资源加载完成（Client -> Gateway）
+  OP_ANCHOR_LOAD_COMPLETED_REQ = 3; // client.proto, AnchorLoadCompletedReq
+  OP_ANCHOR_LOAD_COMPLETED_RSP = 4; // client.proto, AnchorLoadCompletedRsp
 
   // 心跳（Client <-> Gateway）
   OP_HEARTBEAT_REQ = 5;     // client.proto, HeartbeatReq
@@ -38,8 +40,20 @@ enum OpCode {
   OP_RECONNECT_REQ = 7;     // client.proto, ReconnectReq
   OP_RECONNECT_RSP = 8;     // client.proto, ReconnectRsp
 
-  // 同步玩家模型变化 [S2C]
-  OP_SYNC_PLAYER_MODEL = 9; // player.proto, SyncPlayerModel
+  // 同步玩家模型变化 - 主播 [S2C]
+  OP_SYNC_PLAYER_CHANGE_MODEL = 9;   // player.proto, SyncPlayerChangeModel
+
+  // 玩家资源加载完成（Client -> Gateway）
+  OP_PLAYER_LOAD_COMPLETED_REQ = 10; // client.proto, PlayerLoadCompletedReq
+  OP_PLAYER_LOAD_COMPLETED_RSP = 11; // client.proto, PlayerLoadCompletedRsp
+
+  // 同步玩家能量增加 - 主播 [S2C]
+  OP_SYNC_PLAYER_ADD_ENERGY = 12;    // player.proto, SyncPlayerAddEnergy
+  // 玩家能量增加通知 - 玩家 [S2C]
+  OP_PLAYER_ADD_ENERGY_NOTIFY = 13;  // player.proto, PlayerAddEnergyNotify
+
+  // 玩家模型变化通知 - 玩家 [S2C]
+  OP_PLAYER_CHANGE_MODEL_NOTIFY = 14; // player.proto, PlayerChangeModelNotify
 
   // ============================================================
   // 槽位/床位系统 (1000-1999)
@@ -57,6 +71,16 @@ enum OpCode {
   OP_SYNC_SLOT_ADD_PLAYER = 1004;    // slot.proto, SyncSlotAddPlayer
   // 同步槽位人员移除 [S2C]
   OP_SYNC_SLOT_REMOVE_PLAYER = 1005; // slot.proto, SyncSlotRemovePlayer
+  // 同步 PK 增加的积分 [S2C]
+  OP_SYNC_PK_SCORE = 1006;           // slot.proto, SyncPkScore
+  // 同步 PK 送礼倒计时 [S2C]
+  OP_SYNC_PK_GIFT_COOLDOWN = 1007;   // slot.proto, SyncPkGiftCooldown
+  // 同步 PK 开始 [S2C]
+  OP_SYNC_PK_START = 1008;           // slot.proto, SyncPkStart
+  // 同步 PK 结算 [S2C]
+  OP_SYNC_PK_SETTLEMENT = 1009;      // slot.proto, SyncPkSettlement
+  // 同步送礼 [S2C]
+  OP_SYNC_GIFT = 1010;               // slot.proto, SyncGift
 
   // ============================================================
   // 种田系统 (2000-2999)
@@ -70,6 +94,10 @@ enum OpCode {
   OP_PLANTING_REQ = 2002;       // farming.proto, PlantingReq
   // 种植响应 [S2C]
   OP_PLANTING_RES = 2003;       // farming.proto, PlantingRes
+  // 种田开奖结算 - 主播 [S2C]
+  OP_SYNC_PLANTING_SETTLEMENT = 2004;      // farming.proto, SyncPlantingSettlement
+  // 种田开奖结算 - 玩家 [S2C]
+  OP_PLANTING_SETTLEMENT_NOTIFY = 2005;    // farming.proto, PlantingSettlementNotify
 
   // ============================================================
   // 商店系统 (3000-3999)
@@ -133,4 +161,11 @@ enum OpCode {
   OP_SYNC_RELATIONSHIP_UPDATE = 7001;  // relationship.proto, SyncRelationshipUpdate
   // 同步槽位玩家关系标志 [S2C]
   OP_SYNC_SLOT_RELATIONSHIP = 7002;    // relationship.proto, SyncSlotRelationship
+
+  // ============================================================
+  // 播报系统 (8000-8999)
+  // ============================================================
+
+  // 同步播报 [S2C]
+  OP_SYNC_BROADCAST = 8000;            // broadcast.proto, SyncBoardcast
 }

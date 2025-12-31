@@ -7,7 +7,7 @@ option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 // RoleType 角色身份
 enum RoleType {
   ROLE_UNKNOWN = 0;
-  STREAMER = 1;      // 主播
+  ANCHOR = 1;        // 主播
   PLAYER = 2;        // 玩家
 }
 

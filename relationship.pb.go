@@ -25,6 +25,8 @@ const (
 type SyncPlayerRelationships struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Relationships []*PlayerRelationship  `protobuf:"bytes,1,rep,name=relationships,proto3" json:"relationships,omitempty"`
+	SlotId        uint32                 `protobuf:"varint,2,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"`
+	Uuid          string                 `protobuf:"bytes,3,opt,name=uuid,proto3" json:"uuid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -66,10 +68,24 @@ func (x *SyncPlayerRelationships) GetRelationships() []*PlayerRelationship {
 	return nil
 }
 
+func (x *SyncPlayerRelationships) GetSlotId() uint32 {
+	if x != nil {
+		return x.SlotId
+	}
+	return 0
+}
+
+func (x *SyncPlayerRelationships) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
 // SyncRelationshipUpdate [S2C] 增量同步单项数值变动
 type SyncRelationshipUpdate struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PartnerUid    uint64                 `protobuf:"varint,1,opt,name=partner_uid,json=partnerUid,proto3" json:"partner_uid,omitempty"`       // 对方UID
+	PartnerUuid   string                 `protobuf:"bytes,1,opt,name=partner_uuid,json=partnerUuid,proto3" json:"partner_uuid,omitempty"`     // 对方UUID
 	NewExp        uint32                 `protobuf:"varint,2,opt,name=new_exp,json=newExp,proto3" json:"new_exp,omitempty"`                   // 最新经验值
 	DailyFlowers  uint32                 `protobuf:"varint,3,opt,name=daily_flowers,json=dailyFlowers,proto3" json:"daily_flowers,omitempty"` // 最新每日鲜花数
 	unknownFields protoimpl.UnknownFields
@@ -106,11 +122,11 @@ func (*SyncRelationshipUpdate) Descriptor() ([]byte, []int) {
 	return file_relationship_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *SyncRelationshipUpdate) GetPartnerUid() uint64 {
+func (x *SyncRelationshipUpdate) GetPartnerUuid() string {
 	if x != nil {
-		return x.PartnerUid
+		return x.PartnerUuid
 	}
-	return 0
+	return ""
 }
 
 func (x *SyncRelationshipUpdate) GetNewExp() uint32 {
@@ -184,12 +200,13 @@ var File_relationship_proto protoreflect.FileDescriptor
 
 const file_relationship_proto_rawDesc = "" +
 	"\n" +
-	"\x12relationship.proto\x12\x04game\x1a\x17relationship_type.proto\"Y\n" +
+	"\x12relationship.proto\x12\x04game\x1a\x17relationship_type.proto\"\x86\x01\n" +
 	"\x17SyncPlayerRelationships\x12>\n" +
-	"\rrelationships\x18\x01 \x03(\v2\x18.game.PlayerRelationshipR\rrelationships\"w\n" +
-	"\x16SyncRelationshipUpdate\x12\x1f\n" +
-	"\vpartner_uid\x18\x01 \x01(\x04R\n" +
-	"partnerUid\x12\x17\n" +
+	"\rrelationships\x18\x01 \x03(\v2\x18.game.PlayerRelationshipR\rrelationships\x12\x17\n" +
+	"\aslot_id\x18\x02 \x01(\rR\x06slotId\x12\x12\n" +
+	"\x04uuid\x18\x03 \x01(\tR\x04uuid\"y\n" +
+	"\x16SyncRelationshipUpdate\x12!\n" +
+	"\fpartner_uuid\x18\x01 \x01(\tR\vpartnerUuid\x12\x17\n" +
 	"\anew_exp\x18\x02 \x01(\rR\x06newExp\x12#\n" +
 	"\rdaily_flowers\x18\x03 \x01(\rR\fdailyFlowers\"[\n" +
 	"\x14SyncSlotRelationship\x12\x17\n" +

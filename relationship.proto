@@ -9,6 +9,8 @@ import "relationship_type.proto";
 // SyncPlayerRelationships [S2C] 全量同步给玩家本人的关系列表
 message SyncPlayerRelationships {
   repeated PlayerRelationship relationships = 1;
+  uint32 slot_id = 2;
+  string uuid = 3;
 }
 
 // SyncRelationshipUpdate [S2C] 增量同步单项数值变动

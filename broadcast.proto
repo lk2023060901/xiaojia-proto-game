@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
+
+message SyncBoardcast {
+  uint32 id = 1; // 播报 id
+  map<string, string> metadata = 2; // 播报需要替换的内容
+}

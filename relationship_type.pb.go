@@ -81,7 +81,7 @@ type PlayerRelationship struct {
 	Level            uint32                 `protobuf:"varint,2,opt,name=level,proto3" json:"level,omitempty"`                                                 // 关系等级
 	Exp              uint32                 `protobuf:"varint,3,opt,name=exp,proto3" json:"exp,omitempty"`                                                     // 当前关系经验值
 	DailyFlowersSent uint32                 `protobuf:"varint,4,opt,name=daily_flowers_sent,json=dailyFlowersSent,proto3" json:"daily_flowers_sent,omitempty"` // 今日双方互送鲜花的总数
-	Uid              uint64                 `protobuf:"varint,5,opt,name=uid,proto3" json:"uid,omitempty"`                                                     // 对方玩家的UID
+	Uuid             string                 `protobuf:"bytes,5,opt,name=uuid,proto3" json:"uuid,omitempty"`                                                    // 对方玩家的UUID
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -144,24 +144,24 @@ func (x *PlayerRelationship) GetDailyFlowersSent() uint32 {
 	return 0
 }
 
-func (x *PlayerRelationship) GetUid() uint64 {
+func (x *PlayerRelationship) GetUuid() string {
 	if x != nil {
-		return x.Uid
+		return x.Uuid
 	}
-	return 0
+	return ""
 }
 
 var File_relationship_type_proto protoreflect.FileDescriptor
 
 const file_relationship_type_proto_rawDesc = "" +
 	"\n" +
-	"\x17relationship_type.proto\x12\x04game\"\xa8\x01\n" +
+	"\x17relationship_type.proto\x12\x04game\"\xaa\x01\n" +
 	"\x12PlayerRelationship\x12*\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x16.game.RelationshipTypeR\x04type\x12\x14\n" +
 	"\x05level\x18\x02 \x01(\rR\x05level\x12\x10\n" +
 	"\x03exp\x18\x03 \x01(\rR\x03exp\x12,\n" +
-	"\x12daily_flowers_sent\x18\x04 \x01(\rR\x10dailyFlowersSent\x12\x10\n" +
-	"\x03uid\x18\x05 \x01(\x04R\x03uid*c\n" +
+	"\x12daily_flowers_sent\x18\x04 \x01(\rR\x10dailyFlowersSent\x12\x12\n" +
+	"\x04uuid\x18\x05 \x01(\tR\x04uuid*c\n" +
 	"\x10RelationshipType\x12\x11\n" +
 	"\rRELATION_NONE\x10\x00\x12\x13\n" +
 	"\x0fRELATION_FRIEND\x10\x01\x12\x13\n" +

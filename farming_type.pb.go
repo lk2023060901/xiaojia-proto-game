@@ -139,6 +139,7 @@ func (x *FieldState) GetCount() uint32 {
 type FarmingInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Fields        []*FieldState          `protobuf:"bytes,1,rep,name=fields,proto3" json:"fields,omitempty"` // 当前玩家在该槽位的4块田详情
+	Uuid          string                 `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid,omitempty"`     // 所有者
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -178,6 +179,13 @@ func (x *FarmingInfo) GetFields() []*FieldState {
 		return x.Fields
 	}
 	return nil
+}
+
+func (x *FarmingInfo) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
 }
 
 // PlayerFarmingInfo 玩家种田信息
@@ -248,9 +256,10 @@ const file_farming_type_proto_rawDesc = "" +
 	"\vfield_index\x18\x01 \x01(\rR\n" +
 	"fieldIndex\x12\x17\n" +
 	"\aitem_id\x18\x02 \x01(\rR\x06itemId\x12\x14\n" +
-	"\x05count\x18\x03 \x01(\rR\x05count\"7\n" +
+	"\x05count\x18\x03 \x01(\rR\x05count\"K\n" +
 	"\vFarmingInfo\x12(\n" +
-	"\x06fields\x18\x01 \x03(\v2\x10.game.FieldStateR\x06fields\"j\n" +
+	"\x06fields\x18\x01 \x03(\v2\x10.game.FieldStateR\x06fields\x12\x12\n" +
+	"\x04uuid\x18\x02 \x01(\tR\x04uuid\"j\n" +
 	"\x11PlayerFarmingInfo\x12(\n" +
 	"\x06player\x18\x01 \x01(\v2\x10.game.PlayerInfoR\x06player\x12+\n" +
 	"\afarming\x18\x02 \x01(\v2\x11.game.FarmingInfoR\afarmingB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"

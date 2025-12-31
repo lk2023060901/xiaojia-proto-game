@@ -7,20 +7,30 @@ option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 // ErrCode 错误码定义
 //
 // 号段分配规则：
-//   - 每个玩法保留 1000 个号段
+//   - 每个模块保留 1000 个号段
 //   - 0-999: 系统保留
+//   - 1000-1999: Login 模块
+//   - 2000-2999: Gateway 模块
+//   - ...
 //
 enum ErrCode {
   // ============================================================
   // 系统保留 (0-999)
   // ============================================================
-  ERR_SUCCESS = 0;
-  ERR_UNKNOWN = 1;
-  ERR_INTERNAL = 2;
-  ERR_INVALID_PARAM = 3;
+  ERR_SUCCESS = 0;               // 成功
+  ERR_UNKNOWN = 1;               // 未知错误
+  ERR_INTERNAL = 2;              // 内部错误
+  ERR_INVALID_PARAM = 3;         // 参数错误
+  ERR_TIMEOUT = 4;               // 超时
+  ERR_SERVICE_UNAVAILABLE = 5;   // 服务不可用
 
-  // 认证错误
-  ERR_AUTH_FAILED = 10;
-  ERR_TOKEN_INVALID = 11;
-  ERR_TOKEN_EXPIRED = 12;
+  // ============================================================
+  // Login 模块 (1000-1999)
+  // ============================================================
+  ERR_TOKEN_INVALID = 1000;      // Token 无效
+  ERR_TOKEN_EXPIRED = 1001;      // Token 已过期
+  ERR_TOKEN_SIGNATURE = 1002;    // Token 签名错误
+  ERR_AUTH_FAILED = 1003;        // 认证失败
+  ERR_USER_NOT_FOUND = 1010;     // 用户不存在
+  ERR_USER_BANNED = 1011;        // 用户被封禁
 }

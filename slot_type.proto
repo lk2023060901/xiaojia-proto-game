@@ -7,6 +7,7 @@ option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 import "player_type.proto";
 import "bed_type.proto";
 import "farming_type.proto";
+import "relationship_type.proto";
 
 // SlotMode 槽位显示模式
 enum SlotMode {
@@ -14,12 +15,40 @@ enum SlotMode {
   SLOT_MODE_FARMING = 1;  // 种田模式
 }
 
+// BedPkSide 竞赛 PK 阵营
+enum BedPkSide {
+  BED_PK_SIDE_NONE = 0;
+  BED_PK_SIDE_OWNER = 1;      // 擂主方
+  BED_PK_SIDE_CHALLENGER = 2; // 挑战者方
+}
+
+// SlotAction 玩家上床/下床的行为枚举
+enum SlotAction {
+  SLOT_ACTION_NONE = 0;       // 未知
+  SLOT_ACTION_OCCUPY = 1;     // 占领（空床位入住）
+  SLOT_ACTION_SEIZE = 2;      // 抢（主动抢夺他人床位）
+  SLOT_ACTION_INVITE = 3;     // 邀请（被邀请入住）
+  SLOT_ACTION_APPLY = 4;      // 申请（申请入住）
+  SLOT_ACTION_LEAVE = 5;      // 主动离开
+  SLOT_ACTION_KICKED = 6;     // 被踢（被床主踢出）
+  SLOT_ACTION_SEIZED = 7;     // 被抢（床位被他人抢走）
+}
+
+// SlotPlayerInfo 槽位玩家信息
+message SlotPlayerInfo {
+  repeated PlayerRelationship relationships = 1;
+  PlayerInfo player_info = 2;
+  FarmingInfo farm_info = 3;
+}
+
 // SlotInfo 槽位完整信息包装器
 message SlotInfo {
   uint32 slot_id = 1;             // 槽位编号 (1-9)
-  PlayerInfo owner = 2;           // 槽位所有者信息
-  repeated PlayerInfo partners = 3; // 共同拥有者列表 (床位共享/种田同步)
+  SlotPlayerInfo owner = 2;           // 槽位所有者信息
+  repeated SlotPlayerInfo partners = 3; // 共同拥有者列表 (床位共享/种田同步)
   SlotMode mode = 4;              // 当前显示的模式
   BedInfo bed_info = 5;           // 床位详细数据 (仅mode=BED有效)
-  FarmingInfo farming_info = 6;   // 种田详细数据 (仅mode=FARMING有效)
+  int32 aura_current = 6;                 // 槽位当前灵气值
+  uint32 protection_value = 7;            // 保护值 (大于0禁止PK挑战)
+  uint32 seal_value = 8;                  // 封印值 (大于0收益扣除)
 }

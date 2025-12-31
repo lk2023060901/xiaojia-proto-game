@@ -24,7 +24,8 @@ const (
 // [S2C] 全量同步当前主播的所有槽位信息
 type SyncAnchorSlots struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Slots         []*SlotInfo            `protobuf:"bytes,1,rep,name=slots,proto3" json:"slots,omitempty"` // 9个槽位的数据列表
+	Slots         []*SlotInfo            `protobuf:"bytes,1,rep,name=slots,proto3" json:"slots,omitempty"`                             // 9个槽位的数据列表
+	AnchorInfo    *AnchorInfo            `protobuf:"bytes,2,opt,name=anchor_info,json=anchorInfo,proto3" json:"anchor_info,omitempty"` // 主播信息
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -62,6 +63,13 @@ func (*SyncAnchorSlots) Descriptor() ([]byte, []int) {
 func (x *SyncAnchorSlots) GetSlots() []*SlotInfo {
 	if x != nil {
 		return x.Slots
+	}
+	return nil
+}
+
+func (x *SyncAnchorSlots) GetAnchorInfo() *AnchorInfo {
+	if x != nil {
+		return x.AnchorInfo
 	}
 	return nil
 }
@@ -116,7 +124,7 @@ func (x *SyncAnchorSlot) GetSlot() *SlotInfo {
 type SyncSlotModel struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SlotId        uint32                 `protobuf:"varint,1,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"`    // 槽位编号
-	Uid           uint64                 `protobuf:"varint,2,opt,name=uid,proto3" json:"uid,omitempty"`                        // 玩家UID
+	Uuid          string                 `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid,omitempty"`                       // 玩家UUID
 	ModelId       uint32                 `protobuf:"varint,3,opt,name=model_id,json=modelId,proto3" json:"model_id,omitempty"` // 最新模型ID
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -159,11 +167,11 @@ func (x *SyncSlotModel) GetSlotId() uint32 {
 	return 0
 }
 
-func (x *SyncSlotModel) GetUid() uint64 {
+func (x *SyncSlotModel) GetUuid() string {
 	if x != nil {
-		return x.Uid
+		return x.Uuid
 	}
-	return 0
+	return ""
 }
 
 func (x *SyncSlotModel) GetModelId() uint32 {
@@ -176,9 +184,10 @@ func (x *SyncSlotModel) GetModelId() uint32 {
 // SyncSlotAddPlayer [S2C] 同步槽位新增人员
 type SyncSlotAddPlayer struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SlotId        uint32                 `protobuf:"varint,1,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"`    // 槽位编号
-	Info          *PlayerFarmingInfo     `protobuf:"bytes,2,opt,name=info,proto3" json:"info,omitempty"`                       // 玩家详情及种田状态
-	IsOwner       bool                   `protobuf:"varint,3,opt,name=is_owner,json=isOwner,proto3" json:"is_owner,omitempty"` // 是否作为所有者加入
+	SlotId        uint32                 `protobuf:"varint,1,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"`        // 槽位编号
+	Info          *PlayerFarmingInfo     `protobuf:"bytes,2,opt,name=info,proto3" json:"info,omitempty"`                           // 玩家详情及种田状态
+	IsOwner       bool                   `protobuf:"varint,3,opt,name=is_owner,json=isOwner,proto3" json:"is_owner,omitempty"`     // 是否作为所有者加入
+	Action        SlotAction             `protobuf:"varint,4,opt,name=action,proto3,enum=game.SlotAction" json:"action,omitempty"` // 行为
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -234,11 +243,19 @@ func (x *SyncSlotAddPlayer) GetIsOwner() bool {
 	return false
 }
 
+func (x *SyncSlotAddPlayer) GetAction() SlotAction {
+	if x != nil {
+		return x.Action
+	}
+	return SlotAction_SLOT_ACTION_NONE
+}
+
 // SyncSlotRemovePlayer [S2C] 同步槽位人员离开
 type SyncSlotRemovePlayer struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SlotId        uint32                 `protobuf:"varint,1,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"` // 槽位编号
-	Uid           uint64                 `protobuf:"varint,2,opt,name=uid,proto3" json:"uid,omitempty"`                     // 离开玩家的UID
+	SlotId        uint32                 `protobuf:"varint,1,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"`        // 槽位编号
+	Uuid          string                 `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid,omitempty"`                           // 离开玩家的UUID
+	Action        SlotAction             `protobuf:"varint,3,opt,name=action,proto3,enum=game.SlotAction" json:"action,omitempty"` // 行为
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -280,9 +297,321 @@ func (x *SyncSlotRemovePlayer) GetSlotId() uint32 {
 	return 0
 }
 
-func (x *SyncSlotRemovePlayer) GetUid() uint64 {
+func (x *SyncSlotRemovePlayer) GetUuid() string {
 	if x != nil {
-		return x.Uid
+		return x.Uuid
+	}
+	return ""
+}
+
+func (x *SyncSlotRemovePlayer) GetAction() SlotAction {
+	if x != nil {
+		return x.Action
+	}
+	return SlotAction_SLOT_ACTION_NONE
+}
+
+// SyncPkGiftCooldown [S2C] PK 送礼倒计时
+type SyncPkGiftCooldown struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cooldown      uint32                 `protobuf:"varint,1,opt,name=cooldown,proto3" json:"cooldown,omitempty"` // 单位：秒
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SyncPkGiftCooldown) Reset() {
+	*x = SyncPkGiftCooldown{}
+	mi := &file_slot_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SyncPkGiftCooldown) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SyncPkGiftCooldown) ProtoMessage() {}
+
+func (x *SyncPkGiftCooldown) ProtoReflect() protoreflect.Message {
+	mi := &file_slot_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SyncPkGiftCooldown.ProtoReflect.Descriptor instead.
+func (*SyncPkGiftCooldown) Descriptor() ([]byte, []int) {
+	return file_slot_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *SyncPkGiftCooldown) GetCooldown() uint32 {
+	if x != nil {
+		return x.Cooldown
+	}
+	return 0
+}
+
+// SyncPkStart [S2C] PK 开始
+type SyncPkStart struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Owner         *PlayerInfo            `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	Challenger    *PlayerInfo            `protobuf:"bytes,2,opt,name=challenger,proto3" json:"challenger,omitempty"`
+	Cooldown      uint32                 `protobuf:"varint,3,opt,name=cooldown,proto3" json:"cooldown,omitempty"`                             // PK 倒计时
+	GiftCooldown  uint32                 `protobuf:"varint,4,opt,name=gift_cooldown,json=giftCooldown,proto3" json:"gift_cooldown,omitempty"` // PK 送礼倒计时
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SyncPkStart) Reset() {
+	*x = SyncPkStart{}
+	mi := &file_slot_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SyncPkStart) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SyncPkStart) ProtoMessage() {}
+
+func (x *SyncPkStart) ProtoReflect() protoreflect.Message {
+	mi := &file_slot_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SyncPkStart.ProtoReflect.Descriptor instead.
+func (*SyncPkStart) Descriptor() ([]byte, []int) {
+	return file_slot_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *SyncPkStart) GetOwner() *PlayerInfo {
+	if x != nil {
+		return x.Owner
+	}
+	return nil
+}
+
+func (x *SyncPkStart) GetChallenger() *PlayerInfo {
+	if x != nil {
+		return x.Challenger
+	}
+	return nil
+}
+
+func (x *SyncPkStart) GetCooldown() uint32 {
+	if x != nil {
+		return x.Cooldown
+	}
+	return 0
+}
+
+func (x *SyncPkStart) GetGiftCooldown() uint32 {
+	if x != nil {
+		return x.GiftCooldown
+	}
+	return 0
+}
+
+// SyncPkSettlement [S2C] PK 结算
+type SyncPkSettlement struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Winner        string                 `protobuf:"bytes,1,opt,name=winner,proto3" json:"winner,omitempty"` // 胜利方的 uuid
+	Owner         string                 `protobuf:"bytes,2,opt,name=owner,proto3" json:"owner,omitempty"`   // 床所有者
+	Slot          *SlotInfo              `protobuf:"bytes,3,opt,name=slot,proto3" json:"slot,omitempty"`     // 槽位信息
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SyncPkSettlement) Reset() {
+	*x = SyncPkSettlement{}
+	mi := &file_slot_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SyncPkSettlement) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SyncPkSettlement) ProtoMessage() {}
+
+func (x *SyncPkSettlement) ProtoReflect() protoreflect.Message {
+	mi := &file_slot_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SyncPkSettlement.ProtoReflect.Descriptor instead.
+func (*SyncPkSettlement) Descriptor() ([]byte, []int) {
+	return file_slot_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *SyncPkSettlement) GetWinner() string {
+	if x != nil {
+		return x.Winner
+	}
+	return ""
+}
+
+func (x *SyncPkSettlement) GetOwner() string {
+	if x != nil {
+		return x.Owner
+	}
+	return ""
+}
+
+func (x *SyncPkSettlement) GetSlot() *SlotInfo {
+	if x != nil {
+		return x.Slot
+	}
+	return nil
+}
+
+// SyncGift [S2C] 同步送礼
+type SyncGift struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SlotId        uint32                 `protobuf:"varint,1,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"`
+	Receiver      string                 `protobuf:"bytes,2,opt,name=receiver,proto3" json:"receiver,omitempty"`                       // 收礼物的 uuid
+	Sender        *PlayerInfo            `protobuf:"bytes,3,opt,name=sender,proto3" json:"sender,omitempty"`                           // 送礼人
+	ItemCfgId     uint32                 `protobuf:"varint,4,opt,name=item_cfg_id,json=itemCfgId,proto3" json:"item_cfg_id,omitempty"` // 道具 id
+	ItemNum       uint32                 `protobuf:"varint,5,opt,name=item_num,json=itemNum,proto3" json:"item_num,omitempty"`         // 道具数量
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SyncGift) Reset() {
+	*x = SyncGift{}
+	mi := &file_slot_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SyncGift) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SyncGift) ProtoMessage() {}
+
+func (x *SyncGift) ProtoReflect() protoreflect.Message {
+	mi := &file_slot_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SyncGift.ProtoReflect.Descriptor instead.
+func (*SyncGift) Descriptor() ([]byte, []int) {
+	return file_slot_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *SyncGift) GetSlotId() uint32 {
+	if x != nil {
+		return x.SlotId
+	}
+	return 0
+}
+
+func (x *SyncGift) GetReceiver() string {
+	if x != nil {
+		return x.Receiver
+	}
+	return ""
+}
+
+func (x *SyncGift) GetSender() *PlayerInfo {
+	if x != nil {
+		return x.Sender
+	}
+	return nil
+}
+
+func (x *SyncGift) GetItemCfgId() uint32 {
+	if x != nil {
+		return x.ItemCfgId
+	}
+	return 0
+}
+
+func (x *SyncGift) GetItemNum() uint32 {
+	if x != nil {
+		return x.ItemNum
+	}
+	return 0
+}
+
+// SyncPkScore [S2C] 同步 PK 积分变化
+type SyncPkScore struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uuid          string                 `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Score         uint32                 `protobuf:"varint,2,opt,name=score,proto3" json:"score,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SyncPkScore) Reset() {
+	*x = SyncPkScore{}
+	mi := &file_slot_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SyncPkScore) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SyncPkScore) ProtoMessage() {}
+
+func (x *SyncPkScore) ProtoReflect() protoreflect.Message {
+	mi := &file_slot_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SyncPkScore.ProtoReflect.Descriptor instead.
+func (*SyncPkScore) Descriptor() ([]byte, []int) {
+	return file_slot_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SyncPkScore) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
+func (x *SyncPkScore) GetScore() uint32 {
+	if x != nil {
+		return x.Score
 	}
 	return 0
 }
@@ -292,22 +621,48 @@ var File_slot_proto protoreflect.FileDescriptor
 const file_slot_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"slot.proto\x12\x04game\x1a\x0fslot_type.proto\x1a\x12farming_type.proto\"7\n" +
+	"slot.proto\x12\x04game\x1a\x0fslot_type.proto\x1a\x12farming_type.proto\x1a\x11player_type.proto\x1a\x11anchor_type.proto\"j\n" +
 	"\x0fSyncAnchorSlots\x12$\n" +
-	"\x05slots\x18\x01 \x03(\v2\x0e.game.SlotInfoR\x05slots\"4\n" +
+	"\x05slots\x18\x01 \x03(\v2\x0e.game.SlotInfoR\x05slots\x121\n" +
+	"\vanchor_info\x18\x02 \x01(\v2\x10.game.AnchorInfoR\n" +
+	"anchorInfo\"4\n" +
 	"\x0eSyncAnchorSlot\x12\"\n" +
-	"\x04slot\x18\x01 \x01(\v2\x0e.game.SlotInfoR\x04slot\"U\n" +
+	"\x04slot\x18\x01 \x01(\v2\x0e.game.SlotInfoR\x04slot\"W\n" +
 	"\rSyncSlotModel\x12\x17\n" +
-	"\aslot_id\x18\x01 \x01(\rR\x06slotId\x12\x10\n" +
-	"\x03uid\x18\x02 \x01(\x04R\x03uid\x12\x19\n" +
-	"\bmodel_id\x18\x03 \x01(\rR\amodelId\"t\n" +
+	"\aslot_id\x18\x01 \x01(\rR\x06slotId\x12\x12\n" +
+	"\x04uuid\x18\x02 \x01(\tR\x04uuid\x12\x19\n" +
+	"\bmodel_id\x18\x03 \x01(\rR\amodelId\"\x9e\x01\n" +
 	"\x11SyncSlotAddPlayer\x12\x17\n" +
 	"\aslot_id\x18\x01 \x01(\rR\x06slotId\x12+\n" +
 	"\x04info\x18\x02 \x01(\v2\x17.game.PlayerFarmingInfoR\x04info\x12\x19\n" +
-	"\bis_owner\x18\x03 \x01(\bR\aisOwner\"A\n" +
+	"\bis_owner\x18\x03 \x01(\bR\aisOwner\x12(\n" +
+	"\x06action\x18\x04 \x01(\x0e2\x10.game.SlotActionR\x06action\"m\n" +
 	"\x14SyncSlotRemovePlayer\x12\x17\n" +
-	"\aslot_id\x18\x01 \x01(\rR\x06slotId\x12\x10\n" +
-	"\x03uid\x18\x02 \x01(\x04R\x03uidB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
+	"\aslot_id\x18\x01 \x01(\rR\x06slotId\x12\x12\n" +
+	"\x04uuid\x18\x02 \x01(\tR\x04uuid\x12(\n" +
+	"\x06action\x18\x03 \x01(\x0e2\x10.game.SlotActionR\x06action\"0\n" +
+	"\x12SyncPkGiftCooldown\x12\x1a\n" +
+	"\bcooldown\x18\x01 \x01(\rR\bcooldown\"\xa8\x01\n" +
+	"\vSyncPkStart\x12&\n" +
+	"\x05owner\x18\x01 \x01(\v2\x10.game.PlayerInfoR\x05owner\x120\n" +
+	"\n" +
+	"challenger\x18\x02 \x01(\v2\x10.game.PlayerInfoR\n" +
+	"challenger\x12\x1a\n" +
+	"\bcooldown\x18\x03 \x01(\rR\bcooldown\x12#\n" +
+	"\rgift_cooldown\x18\x04 \x01(\rR\fgiftCooldown\"d\n" +
+	"\x10SyncPkSettlement\x12\x16\n" +
+	"\x06winner\x18\x01 \x01(\tR\x06winner\x12\x14\n" +
+	"\x05owner\x18\x02 \x01(\tR\x05owner\x12\"\n" +
+	"\x04slot\x18\x03 \x01(\v2\x0e.game.SlotInfoR\x04slot\"\xa4\x01\n" +
+	"\bSyncGift\x12\x17\n" +
+	"\aslot_id\x18\x01 \x01(\rR\x06slotId\x12\x1a\n" +
+	"\breceiver\x18\x02 \x01(\tR\breceiver\x12(\n" +
+	"\x06sender\x18\x03 \x01(\v2\x10.game.PlayerInfoR\x06sender\x12\x1e\n" +
+	"\vitem_cfg_id\x18\x04 \x01(\rR\titemCfgId\x12\x19\n" +
+	"\bitem_num\x18\x05 \x01(\rR\aitemNum\"7\n" +
+	"\vSyncPkScore\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\tR\x04uuid\x12\x14\n" +
+	"\x05score\x18\x02 \x01(\rR\x05scoreB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
 
 var (
 	file_slot_proto_rawDescOnce sync.Once
@@ -321,25 +676,40 @@ func file_slot_proto_rawDescGZIP() []byte {
 	return file_slot_proto_rawDescData
 }
 
-var file_slot_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_slot_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_slot_proto_goTypes = []any{
 	(*SyncAnchorSlots)(nil),      // 0: game.SyncAnchorSlots
 	(*SyncAnchorSlot)(nil),       // 1: game.SyncAnchorSlot
 	(*SyncSlotModel)(nil),        // 2: game.SyncSlotModel
 	(*SyncSlotAddPlayer)(nil),    // 3: game.SyncSlotAddPlayer
 	(*SyncSlotRemovePlayer)(nil), // 4: game.SyncSlotRemovePlayer
-	(*SlotInfo)(nil),             // 5: game.SlotInfo
-	(*PlayerFarmingInfo)(nil),    // 6: game.PlayerFarmingInfo
+	(*SyncPkGiftCooldown)(nil),   // 5: game.SyncPkGiftCooldown
+	(*SyncPkStart)(nil),          // 6: game.SyncPkStart
+	(*SyncPkSettlement)(nil),     // 7: game.SyncPkSettlement
+	(*SyncGift)(nil),             // 8: game.SyncGift
+	(*SyncPkScore)(nil),          // 9: game.SyncPkScore
+	(*SlotInfo)(nil),             // 10: game.SlotInfo
+	(*AnchorInfo)(nil),           // 11: game.AnchorInfo
+	(*PlayerFarmingInfo)(nil),    // 12: game.PlayerFarmingInfo
+	(SlotAction)(0),              // 13: game.SlotAction
+	(*PlayerInfo)(nil),           // 14: game.PlayerInfo
 }
 var file_slot_proto_depIdxs = []int32{
-	5, // 0: game.SyncAnchorSlots.slots:type_name -> game.SlotInfo
-	5, // 1: game.SyncAnchorSlot.slot:type_name -> game.SlotInfo
-	6, // 2: game.SyncSlotAddPlayer.info:type_name -> game.PlayerFarmingInfo
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	10, // 0: game.SyncAnchorSlots.slots:type_name -> game.SlotInfo
+	11, // 1: game.SyncAnchorSlots.anchor_info:type_name -> game.AnchorInfo
+	10, // 2: game.SyncAnchorSlot.slot:type_name -> game.SlotInfo
+	12, // 3: game.SyncSlotAddPlayer.info:type_name -> game.PlayerFarmingInfo
+	13, // 4: game.SyncSlotAddPlayer.action:type_name -> game.SlotAction
+	13, // 5: game.SyncSlotRemovePlayer.action:type_name -> game.SlotAction
+	14, // 6: game.SyncPkStart.owner:type_name -> game.PlayerInfo
+	14, // 7: game.SyncPkStart.challenger:type_name -> game.PlayerInfo
+	10, // 8: game.SyncPkSettlement.slot:type_name -> game.SlotInfo
+	14, // 9: game.SyncGift.sender:type_name -> game.PlayerInfo
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_slot_proto_init() }
@@ -349,13 +719,15 @@ func file_slot_proto_init() {
 	}
 	file_slot_type_proto_init()
 	file_farming_type_proto_init()
+	file_player_type_proto_init()
+	file_anchor_type_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_slot_proto_rawDesc), len(file_slot_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -7,11 +7,24 @@ option go_package = "github.com/lk2023060901/xiaojia-proto-game;game";
 import "err_code.proto";
 
 // ============================================================
-// 资源加载完成
+// 资源加载完成 - 主播
 // ============================================================
 
-// ClientLoadCompletedNotify 客户端资源加载完成通知（Client -> Gateway）
-message ClientLoadCompletedNotify {}
+// AnchorLoadCompletedReq 主播资源加载完成请求 [C2S]
+message AnchorLoadCompletedReq {}
+
+// AnchorLoadCompletedRsp 主播资源加载完成响应 [S2C]
+message AnchorLoadCompletedRsp {}
+
+// ============================================================
+// 资源加载完成 - 玩家
+// ============================================================
+
+// PlayerLoadCompletedReq 玩家资源加载完成请求 [C2S]
+message PlayerLoadCompletedReq {}
+
+// PlayerLoadCompletedRsp 玩家资源加载完成响应 [S2C]
+message PlayerLoadCompletedRsp {}
 
 // ============================================================
 // 心跳

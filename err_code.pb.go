@@ -24,43 +24,63 @@ const (
 // ErrCode 错误码定义
 //
 // 号段分配规则：
-//   - 每个玩法保留 1000 个号段
+//   - 每个模块保留 1000 个号段
 //   - 0-999: 系统保留
+//   - 1000-1999: Login 模块
+//   - 2000-2999: Gateway 模块
+//   - ...
 type ErrCode int32
 
 const (
 	// ============================================================
 	// 系统保留 (0-999)
 	// ============================================================
-	ErrCode_ERR_SUCCESS       ErrCode = 0
-	ErrCode_ERR_UNKNOWN       ErrCode = 1
-	ErrCode_ERR_INTERNAL      ErrCode = 2
-	ErrCode_ERR_INVALID_PARAM ErrCode = 3
-	// 认证错误
-	ErrCode_ERR_AUTH_FAILED   ErrCode = 10
-	ErrCode_ERR_TOKEN_INVALID ErrCode = 11
-	ErrCode_ERR_TOKEN_EXPIRED ErrCode = 12
+	ErrCode_ERR_SUCCESS             ErrCode = 0 // 成功
+	ErrCode_ERR_UNKNOWN             ErrCode = 1 // 未知错误
+	ErrCode_ERR_INTERNAL            ErrCode = 2 // 内部错误
+	ErrCode_ERR_INVALID_PARAM       ErrCode = 3 // 参数错误
+	ErrCode_ERR_TIMEOUT             ErrCode = 4 // 超时
+	ErrCode_ERR_SERVICE_UNAVAILABLE ErrCode = 5 // 服务不可用
+	// ============================================================
+	// Login 模块 (1000-1999)
+	// ============================================================
+	ErrCode_ERR_TOKEN_INVALID   ErrCode = 1000 // Token 无效
+	ErrCode_ERR_TOKEN_EXPIRED   ErrCode = 1001 // Token 已过期
+	ErrCode_ERR_TOKEN_SIGNATURE ErrCode = 1002 // Token 签名错误
+	ErrCode_ERR_AUTH_FAILED     ErrCode = 1003 // 认证失败
+	ErrCode_ERR_USER_NOT_FOUND  ErrCode = 1010 // 用户不存在
+	ErrCode_ERR_USER_BANNED     ErrCode = 1011 // 用户被封禁
 )
 
 // Enum value maps for ErrCode.
 var (
 	ErrCode_name = map[int32]string{
-		0:  "ERR_SUCCESS",
-		1:  "ERR_UNKNOWN",
-		2:  "ERR_INTERNAL",
-		3:  "ERR_INVALID_PARAM",
-		10: "ERR_AUTH_FAILED",
-		11: "ERR_TOKEN_INVALID",
-		12: "ERR_TOKEN_EXPIRED",
+		0:    "ERR_SUCCESS",
+		1:    "ERR_UNKNOWN",
+		2:    "ERR_INTERNAL",
+		3:    "ERR_INVALID_PARAM",
+		4:    "ERR_TIMEOUT",
+		5:    "ERR_SERVICE_UNAVAILABLE",
+		1000: "ERR_TOKEN_INVALID",
+		1001: "ERR_TOKEN_EXPIRED",
+		1002: "ERR_TOKEN_SIGNATURE",
+		1003: "ERR_AUTH_FAILED",
+		1010: "ERR_USER_NOT_FOUND",
+		1011: "ERR_USER_BANNED",
 	}
 	ErrCode_value = map[string]int32{
-		"ERR_SUCCESS":       0,
-		"ERR_UNKNOWN":       1,
-		"ERR_INTERNAL":      2,
-		"ERR_INVALID_PARAM": 3,
-		"ERR_AUTH_FAILED":   10,
-		"ERR_TOKEN_INVALID": 11,
-		"ERR_TOKEN_EXPIRED": 12,
+		"ERR_SUCCESS":             0,
+		"ERR_UNKNOWN":             1,
+		"ERR_INTERNAL":            2,
+		"ERR_INVALID_PARAM":       3,
+		"ERR_TIMEOUT":             4,
+		"ERR_SERVICE_UNAVAILABLE": 5,
+		"ERR_TOKEN_INVALID":       1000,
+		"ERR_TOKEN_EXPIRED":       1001,
+		"ERR_TOKEN_SIGNATURE":     1002,
+		"ERR_AUTH_FAILED":         1003,
+		"ERR_USER_NOT_FOUND":      1010,
+		"ERR_USER_BANNED":         1011,
 	}
 )
 
@@ -95,16 +115,20 @@ var File_err_code_proto protoreflect.FileDescriptor
 
 const file_err_code_proto_rawDesc = "" +
 	"\n" +
-	"\x0eerr_code.proto\x12\x04game*\x97\x01\n" +
+	"\x0eerr_code.proto\x12\x04game*\x91\x02\n" +
 	"\aErrCode\x12\x0f\n" +
 	"\vERR_SUCCESS\x10\x00\x12\x0f\n" +
 	"\vERR_UNKNOWN\x10\x01\x12\x10\n" +
 	"\fERR_INTERNAL\x10\x02\x12\x15\n" +
-	"\x11ERR_INVALID_PARAM\x10\x03\x12\x13\n" +
-	"\x0fERR_AUTH_FAILED\x10\n" +
-	"\x12\x15\n" +
-	"\x11ERR_TOKEN_INVALID\x10\v\x12\x15\n" +
-	"\x11ERR_TOKEN_EXPIRED\x10\fB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
+	"\x11ERR_INVALID_PARAM\x10\x03\x12\x0f\n" +
+	"\vERR_TIMEOUT\x10\x04\x12\x1b\n" +
+	"\x17ERR_SERVICE_UNAVAILABLE\x10\x05\x12\x16\n" +
+	"\x11ERR_TOKEN_INVALID\x10\xe8\a\x12\x16\n" +
+	"\x11ERR_TOKEN_EXPIRED\x10\xe9\a\x12\x18\n" +
+	"\x13ERR_TOKEN_SIGNATURE\x10\xea\a\x12\x14\n" +
+	"\x0fERR_AUTH_FAILED\x10\xeb\a\x12\x17\n" +
+	"\x12ERR_USER_NOT_FOUND\x10\xf2\a\x12\x14\n" +
+	"\x0fERR_USER_BANNED\x10\xf3\aB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
 
 var (
 	file_err_code_proto_rawDescOnce sync.Once

@@ -33,6 +33,7 @@ const (
 //   - 5000-5999: 排行榜系统
 //   - 6000-6999: 主播系统
 //   - 7000-7999: 关系牌系统
+//   - 8000-8999: 播报系统
 type OpCode int32
 
 const (
@@ -43,8 +44,9 @@ const (
 	// 客户端认证（Client -> Gateway）
 	OpCode_OP_AUTH_REQ OpCode = 1 // anchor.proto, AuthReq
 	OpCode_OP_AUTH_RSP OpCode = 2 // anchor.proto, AuthRsp
-	// 资源加载完成通知（Client -> Gateway）
-	OpCode_OP_CLIENT_LOAD_COMPLETED_NOTIFY OpCode = 3 // client.proto, ClientLoadCompletedNotify
+	// 主播资源加载完成（Client -> Gateway）
+	OpCode_OP_ANCHOR_LOAD_COMPLETED_REQ OpCode = 3 // client.proto, AnchorLoadCompletedReq
+	OpCode_OP_ANCHOR_LOAD_COMPLETED_RSP OpCode = 4 // client.proto, AnchorLoadCompletedRsp
 	// 心跳（Client <-> Gateway）
 	OpCode_OP_HEARTBEAT_REQ OpCode = 5 // client.proto, HeartbeatReq
 	OpCode_OP_HEARTBEAT_RSP OpCode = 6 // client.proto, HeartbeatRsp
@@ -53,6 +55,9 @@ const (
 	OpCode_OP_RECONNECT_RSP OpCode = 8 // client.proto, ReconnectRsp
 	// 同步玩家模型变化 [S2C]
 	OpCode_OP_SYNC_PLAYER_MODEL OpCode = 9 // player.proto, SyncPlayerModel
+	// 玩家资源加载完成（Client -> Gateway）
+	OpCode_OP_PLAYER_LOAD_COMPLETED_REQ OpCode = 10 // client.proto, PlayerLoadCompletedReq
+	OpCode_OP_PLAYER_LOAD_COMPLETED_RSP OpCode = 11 // client.proto, PlayerLoadCompletedRsp
 	// 同步所有槽位信息 [S2C]
 	OpCode_OP_SYNC_ANCHOR_SLOTS OpCode = 1000 // slot.proto, SyncAnchorSlots
 	// 同步单个槽位信息 [S2C]
@@ -65,6 +70,16 @@ const (
 	OpCode_OP_SYNC_SLOT_ADD_PLAYER OpCode = 1004 // slot.proto, SyncSlotAddPlayer
 	// 同步槽位人员移除 [S2C]
 	OpCode_OP_SYNC_SLOT_REMOVE_PLAYER OpCode = 1005 // slot.proto, SyncSlotRemovePlayer
+	// 同步 PK 增加的积分 [S2C]
+	OpCode_OP_SYNC_PK_SCORE OpCode = 1006 // slot.proto, SyncPkScore
+	// 同步 PK 送礼倒计时 [S2C]
+	OpCode_OP_SYNC_PK_GIFT_COOLDOWN OpCode = 1007 // slot.proto, SyncPkGiftCooldown
+	// 同步 PK 开始 [S2C]
+	OpCode_OP_SYNC_PK_START OpCode = 1008 // slot.proto, SyncPkStart
+	// 同步 PK 结算 [S2C]
+	OpCode_OP_SYNC_PK_SETTLEMENT OpCode = 1009 // slot.proto, SyncPkSettlement
+	// 同步送礼 [S2C]
+	OpCode_OP_SYNC_GIFT OpCode = 1010 // slot.proto, SyncGift
 	// 同步种田轮次信息 [S2C]
 	OpCode_OP_SYNC_FARMING_ROUND OpCode = 2000 // farming.proto, SyncFarmingRound
 	// 同步单个田块变更 [S2C]
@@ -73,6 +88,10 @@ const (
 	OpCode_OP_PLANTING_REQ OpCode = 2002 // farming.proto, PlantingReq
 	// 种植响应 [S2C]
 	OpCode_OP_PLANTING_RES OpCode = 2003 // farming.proto, PlantingRes
+	// 种田开奖结算 - 主播 [S2C]
+	OpCode_OP_SYNC_PLANTING_SETTLEMENT OpCode = 2004 // farming.proto, SyncPlantingSettlement
+	// 种田开奖结算 - 玩家 [S2C]
+	OpCode_OP_PLANTING_SETTLEMENT_NOTIFY OpCode = 2005 // farming.proto, PlantingSettlementNotify
 	// 同步商店完整列表 [S2C]
 	OpCode_OP_SYNC_STORE_GOODS OpCode = 3000 // store.proto, SyncStoreGoods
 	// 同步单个商品状态 [S2C]
@@ -111,6 +130,8 @@ const (
 	OpCode_OP_SYNC_RELATIONSHIP_UPDATE OpCode = 7001 // relationship.proto, SyncRelationshipUpdate
 	// 同步槽位玩家关系标志 [S2C]
 	OpCode_OP_SYNC_SLOT_RELATIONSHIP OpCode = 7002 // relationship.proto, SyncSlotRelationship
+	// 同步播报 [S2C]
+	OpCode_OP_SYNC_BROADCAST OpCode = 8000 // broadcast.proto, SyncBoardcast
 )
 
 // Enum value maps for OpCode.
@@ -119,22 +140,32 @@ var (
 		0:    "OP_NONE",
 		1:    "OP_AUTH_REQ",
 		2:    "OP_AUTH_RSP",
-		3:    "OP_CLIENT_LOAD_COMPLETED_NOTIFY",
+		3:    "OP_ANCHOR_LOAD_COMPLETED_REQ",
+		4:    "OP_ANCHOR_LOAD_COMPLETED_RSP",
 		5:    "OP_HEARTBEAT_REQ",
 		6:    "OP_HEARTBEAT_RSP",
 		7:    "OP_RECONNECT_REQ",
 		8:    "OP_RECONNECT_RSP",
 		9:    "OP_SYNC_PLAYER_MODEL",
+		10:   "OP_PLAYER_LOAD_COMPLETED_REQ",
+		11:   "OP_PLAYER_LOAD_COMPLETED_RSP",
 		1000: "OP_SYNC_ANCHOR_SLOTS",
 		1001: "OP_SYNC_ANCHOR_SLOT",
 		1002: "OP_SYNC_BED_VALUE",
 		1003: "OP_SYNC_SLOT_MODEL",
 		1004: "OP_SYNC_SLOT_ADD_PLAYER",
 		1005: "OP_SYNC_SLOT_REMOVE_PLAYER",
+		1006: "OP_SYNC_PK_SCORE",
+		1007: "OP_SYNC_PK_GIFT_COOLDOWN",
+		1008: "OP_SYNC_PK_START",
+		1009: "OP_SYNC_PK_SETTLEMENT",
+		1010: "OP_SYNC_GIFT",
 		2000: "OP_SYNC_FARMING_ROUND",
 		2001: "OP_SYNC_FARMING_FIELD",
 		2002: "OP_PLANTING_REQ",
 		2003: "OP_PLANTING_RES",
+		2004: "OP_SYNC_PLANTING_SETTLEMENT",
+		2005: "OP_PLANTING_SETTLEMENT_NOTIFY",
 		3000: "OP_SYNC_STORE_GOODS",
 		3001: "OP_SYNC_STORE_GOODS_ITEM",
 		3002: "OP_BUY_STORE_GOODS_REQ",
@@ -154,46 +185,58 @@ var (
 		7000: "OP_SYNC_PLAYER_RELATIONSHIPS",
 		7001: "OP_SYNC_RELATIONSHIP_UPDATE",
 		7002: "OP_SYNC_SLOT_RELATIONSHIP",
+		8000: "OP_SYNC_BROADCAST",
 	}
 	OpCode_value = map[string]int32{
-		"OP_NONE":                         0,
-		"OP_AUTH_REQ":                     1,
-		"OP_AUTH_RSP":                     2,
-		"OP_CLIENT_LOAD_COMPLETED_NOTIFY": 3,
-		"OP_HEARTBEAT_REQ":                5,
-		"OP_HEARTBEAT_RSP":                6,
-		"OP_RECONNECT_REQ":                7,
-		"OP_RECONNECT_RSP":                8,
-		"OP_SYNC_PLAYER_MODEL":            9,
-		"OP_SYNC_ANCHOR_SLOTS":            1000,
-		"OP_SYNC_ANCHOR_SLOT":             1001,
-		"OP_SYNC_BED_VALUE":               1002,
-		"OP_SYNC_SLOT_MODEL":              1003,
-		"OP_SYNC_SLOT_ADD_PLAYER":         1004,
-		"OP_SYNC_SLOT_REMOVE_PLAYER":      1005,
-		"OP_SYNC_FARMING_ROUND":           2000,
-		"OP_SYNC_FARMING_FIELD":           2001,
-		"OP_PLANTING_REQ":                 2002,
-		"OP_PLANTING_RES":                 2003,
-		"OP_SYNC_STORE_GOODS":             3000,
-		"OP_SYNC_STORE_GOODS_ITEM":        3001,
-		"OP_BUY_STORE_GOODS_REQ":          3002,
-		"OP_BUY_STORE_GOODS_RES":          3003,
-		"OP_SYNC_COMP_VOTING":             4000,
-		"OP_SYNC_COMP_VOTE_UPDATE":        4001,
-		"OP_SYNC_COMP_STAGE":              4002,
-		"OP_SYNC_COMP_SIGNUP":             4003,
-		"OP_SYNC_COMP_PK":                 4004,
-		"OP_SYNC_COMP_PK_SCORE":           4005,
-		"OP_SYNC_COMP_SETTLEMENT":         4006,
-		"OP_GET_RANK_REQ":                 5000,
-		"OP_SYNC_RANK":                    5001,
-		"OP_SYNC_ANCHOR_INFO":             6000,
-		"OP_SWITCH_ANCHOR_SCENE_REQ":      6001,
-		"OP_SWITCH_ANCHOR_SCENE_RES":      6002,
-		"OP_SYNC_PLAYER_RELATIONSHIPS":    7000,
-		"OP_SYNC_RELATIONSHIP_UPDATE":     7001,
-		"OP_SYNC_SLOT_RELATIONSHIP":       7002,
+		"OP_NONE":                       0,
+		"OP_AUTH_REQ":                   1,
+		"OP_AUTH_RSP":                   2,
+		"OP_ANCHOR_LOAD_COMPLETED_REQ":  3,
+		"OP_ANCHOR_LOAD_COMPLETED_RSP":  4,
+		"OP_HEARTBEAT_REQ":              5,
+		"OP_HEARTBEAT_RSP":              6,
+		"OP_RECONNECT_REQ":              7,
+		"OP_RECONNECT_RSP":              8,
+		"OP_SYNC_PLAYER_MODEL":          9,
+		"OP_PLAYER_LOAD_COMPLETED_REQ":  10,
+		"OP_PLAYER_LOAD_COMPLETED_RSP":  11,
+		"OP_SYNC_ANCHOR_SLOTS":          1000,
+		"OP_SYNC_ANCHOR_SLOT":           1001,
+		"OP_SYNC_BED_VALUE":             1002,
+		"OP_SYNC_SLOT_MODEL":            1003,
+		"OP_SYNC_SLOT_ADD_PLAYER":       1004,
+		"OP_SYNC_SLOT_REMOVE_PLAYER":    1005,
+		"OP_SYNC_PK_SCORE":              1006,
+		"OP_SYNC_PK_GIFT_COOLDOWN":      1007,
+		"OP_SYNC_PK_START":              1008,
+		"OP_SYNC_PK_SETTLEMENT":         1009,
+		"OP_SYNC_GIFT":                  1010,
+		"OP_SYNC_FARMING_ROUND":         2000,
+		"OP_SYNC_FARMING_FIELD":         2001,
+		"OP_PLANTING_REQ":               2002,
+		"OP_PLANTING_RES":               2003,
+		"OP_SYNC_PLANTING_SETTLEMENT":   2004,
+		"OP_PLANTING_SETTLEMENT_NOTIFY": 2005,
+		"OP_SYNC_STORE_GOODS":           3000,
+		"OP_SYNC_STORE_GOODS_ITEM":      3001,
+		"OP_BUY_STORE_GOODS_REQ":        3002,
+		"OP_BUY_STORE_GOODS_RES":        3003,
+		"OP_SYNC_COMP_VOTING":           4000,
+		"OP_SYNC_COMP_VOTE_UPDATE":      4001,
+		"OP_SYNC_COMP_STAGE":            4002,
+		"OP_SYNC_COMP_SIGNUP":           4003,
+		"OP_SYNC_COMP_PK":               4004,
+		"OP_SYNC_COMP_PK_SCORE":         4005,
+		"OP_SYNC_COMP_SETTLEMENT":       4006,
+		"OP_GET_RANK_REQ":               5000,
+		"OP_SYNC_RANK":                  5001,
+		"OP_SYNC_ANCHOR_INFO":           6000,
+		"OP_SWITCH_ANCHOR_SCENE_REQ":    6001,
+		"OP_SWITCH_ANCHOR_SCENE_RES":    6002,
+		"OP_SYNC_PLAYER_RELATIONSHIPS":  7000,
+		"OP_SYNC_RELATIONSHIP_UPDATE":   7001,
+		"OP_SYNC_SLOT_RELATIONSHIP":     7002,
+		"OP_SYNC_BROADCAST":             8000,
 	}
 )
 
@@ -228,27 +271,39 @@ var File_op_code_proto protoreflect.FileDescriptor
 
 const file_op_code_proto_rawDesc = "" +
 	"\n" +
-	"\rop_code.proto\x12\x04game*\xf0\a\n" +
+	"\rop_code.proto\x12\x04game*\xad\n" +
+	"\n" +
 	"\x06OpCode\x12\v\n" +
 	"\aOP_NONE\x10\x00\x12\x0f\n" +
 	"\vOP_AUTH_REQ\x10\x01\x12\x0f\n" +
-	"\vOP_AUTH_RSP\x10\x02\x12#\n" +
-	"\x1fOP_CLIENT_LOAD_COMPLETED_NOTIFY\x10\x03\x12\x14\n" +
+	"\vOP_AUTH_RSP\x10\x02\x12 \n" +
+	"\x1cOP_ANCHOR_LOAD_COMPLETED_REQ\x10\x03\x12 \n" +
+	"\x1cOP_ANCHOR_LOAD_COMPLETED_RSP\x10\x04\x12\x14\n" +
 	"\x10OP_HEARTBEAT_REQ\x10\x05\x12\x14\n" +
 	"\x10OP_HEARTBEAT_RSP\x10\x06\x12\x14\n" +
 	"\x10OP_RECONNECT_REQ\x10\a\x12\x14\n" +
 	"\x10OP_RECONNECT_RSP\x10\b\x12\x18\n" +
-	"\x14OP_SYNC_PLAYER_MODEL\x10\t\x12\x19\n" +
+	"\x14OP_SYNC_PLAYER_MODEL\x10\t\x12 \n" +
+	"\x1cOP_PLAYER_LOAD_COMPLETED_REQ\x10\n" +
+	"\x12 \n" +
+	"\x1cOP_PLAYER_LOAD_COMPLETED_RSP\x10\v\x12\x19\n" +
 	"\x14OP_SYNC_ANCHOR_SLOTS\x10\xe8\a\x12\x18\n" +
 	"\x13OP_SYNC_ANCHOR_SLOT\x10\xe9\a\x12\x16\n" +
 	"\x11OP_SYNC_BED_VALUE\x10\xea\a\x12\x17\n" +
 	"\x12OP_SYNC_SLOT_MODEL\x10\xeb\a\x12\x1c\n" +
 	"\x17OP_SYNC_SLOT_ADD_PLAYER\x10\xec\a\x12\x1f\n" +
-	"\x1aOP_SYNC_SLOT_REMOVE_PLAYER\x10\xed\a\x12\x1a\n" +
+	"\x1aOP_SYNC_SLOT_REMOVE_PLAYER\x10\xed\a\x12\x15\n" +
+	"\x10OP_SYNC_PK_SCORE\x10\xee\a\x12\x1d\n" +
+	"\x18OP_SYNC_PK_GIFT_COOLDOWN\x10\xef\a\x12\x15\n" +
+	"\x10OP_SYNC_PK_START\x10\xf0\a\x12\x1a\n" +
+	"\x15OP_SYNC_PK_SETTLEMENT\x10\xf1\a\x12\x11\n" +
+	"\fOP_SYNC_GIFT\x10\xf2\a\x12\x1a\n" +
 	"\x15OP_SYNC_FARMING_ROUND\x10\xd0\x0f\x12\x1a\n" +
 	"\x15OP_SYNC_FARMING_FIELD\x10\xd1\x0f\x12\x14\n" +
 	"\x0fOP_PLANTING_REQ\x10\xd2\x0f\x12\x14\n" +
-	"\x0fOP_PLANTING_RES\x10\xd3\x0f\x12\x18\n" +
+	"\x0fOP_PLANTING_RES\x10\xd3\x0f\x12 \n" +
+	"\x1bOP_SYNC_PLANTING_SETTLEMENT\x10\xd4\x0f\x12\"\n" +
+	"\x1dOP_PLANTING_SETTLEMENT_NOTIFY\x10\xd5\x0f\x12\x18\n" +
 	"\x13OP_SYNC_STORE_GOODS\x10\xb8\x17\x12\x1d\n" +
 	"\x18OP_SYNC_STORE_GOODS_ITEM\x10\xb9\x17\x12\x1b\n" +
 	"\x16OP_BUY_STORE_GOODS_REQ\x10\xba\x17\x12\x1b\n" +
@@ -267,7 +322,8 @@ const file_op_code_proto_rawDesc = "" +
 	"\x1aOP_SWITCH_ANCHOR_SCENE_RES\x10\xf2.\x12!\n" +
 	"\x1cOP_SYNC_PLAYER_RELATIONSHIPS\x10\xd86\x12 \n" +
 	"\x1bOP_SYNC_RELATIONSHIP_UPDATE\x10\xd96\x12\x1e\n" +
-	"\x19OP_SYNC_SLOT_RELATIONSHIP\x10\xda6B1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
+	"\x19OP_SYNC_SLOT_RELATIONSHIP\x10\xda6\x12\x16\n" +
+	"\x11OP_SYNC_BROADCAST\x10\xc0>B1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
 
 var (
 	file_op_code_proto_rawDescOnce sync.Once

@@ -74,6 +74,7 @@ type BedValueType int32
 const (
 	BedValueType_BED_VALUE_PROTECTION BedValueType = 0 // 保护值
 	BedValueType_BED_VALUE_SEAL       BedValueType = 1 // 封印值
+	BedValueType_BED_VALUE_ENERGY     BedValueType = 2 // 装饰能量
 )
 
 // Enum value maps for BedValueType.
@@ -81,10 +82,12 @@ var (
 	BedValueType_name = map[int32]string{
 		0: "BED_VALUE_PROTECTION",
 		1: "BED_VALUE_SEAL",
+		2: "BED_VALUE_ENERGY",
 	}
 	BedValueType_value = map[string]int32{
 		"BED_VALUE_PROTECTION": 0,
 		"BED_VALUE_SEAL":       1,
+		"BED_VALUE_ENERGY":     2,
 	}
 )
 
@@ -202,13 +205,10 @@ func (x *BedPkInfo) GetChallengerSupporters() []*PlayerInfo {
 
 // BedInfo 床位实时业务状态
 type BedInfo struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	AuraCurrent     int32                  `protobuf:"varint,1,opt,name=aura_current,json=auraCurrent,proto3" json:"aura_current,omitempty"`             // 槽位当前灵气值
-	ProtectionValue uint32                 `protobuf:"varint,2,opt,name=protection_value,json=protectionValue,proto3" json:"protection_value,omitempty"` // 保护值 (大于0禁止PK挑战)
-	SealValue       uint32                 `protobuf:"varint,3,opt,name=seal_value,json=sealValue,proto3" json:"seal_value,omitempty"`                   // 封印值 (大于0收益扣除)
-	PkInfo          *BedPkInfo             `protobuf:"bytes,4,opt,name=pk_info,json=pkInfo,proto3" json:"pk_info,omitempty"`                             // PK数据 (如果为空则非PK状态)
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PkInfo        *BedPkInfo             `protobuf:"bytes,1,opt,name=pk_info,json=pkInfo,proto3" json:"pk_info,omitempty"` // PK数据 (如果为空则非PK状态)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *BedInfo) Reset() {
@@ -241,27 +241,6 @@ func (*BedInfo) Descriptor() ([]byte, []int) {
 	return file_bed_type_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *BedInfo) GetAuraCurrent() int32 {
-	if x != nil {
-		return x.AuraCurrent
-	}
-	return 0
-}
-
-func (x *BedInfo) GetProtectionValue() uint32 {
-	if x != nil {
-		return x.ProtectionValue
-	}
-	return 0
-}
-
-func (x *BedInfo) GetSealValue() uint32 {
-	if x != nil {
-		return x.SealValue
-	}
-	return 0
-}
-
 func (x *BedInfo) GetPkInfo() *BedPkInfo {
 	if x != nil {
 		return x.PkInfo
@@ -283,21 +262,18 @@ const file_bed_type_proto_rawDesc = "" +
 	"\x10challenger_score\x18\x03 \x01(\x03R\x0fchallengerScore\x12'\n" +
 	"\x0ftotal_countdown\x18\x04 \x01(\rR\x0etotalCountdown\x12;\n" +
 	"\x10owner_supporters\x18\x05 \x03(\v2\x10.game.PlayerInfoR\x0fownerSupporters\x12E\n" +
-	"\x15challenger_supporters\x18\x06 \x03(\v2\x10.game.PlayerInfoR\x14challengerSupporters\"\xa0\x01\n" +
-	"\aBedInfo\x12!\n" +
-	"\faura_current\x18\x01 \x01(\x05R\vauraCurrent\x12)\n" +
-	"\x10protection_value\x18\x02 \x01(\rR\x0fprotectionValue\x12\x1d\n" +
-	"\n" +
-	"seal_value\x18\x03 \x01(\rR\tsealValue\x12(\n" +
-	"\apk_info\x18\x04 \x01(\v2\x0f.game.BedPkInfoR\x06pkInfo*+\n" +
+	"\x15challenger_supporters\x18\x06 \x03(\v2\x10.game.PlayerInfoR\x14challengerSupporters\"3\n" +
+	"\aBedInfo\x12(\n" +
+	"\apk_info\x18\x01 \x01(\v2\x0f.game.BedPkInfoR\x06pkInfo*+\n" +
 	"\tBedOpType\x12\x0e\n" +
 	"\n" +
 	"BED_OP_ADD\x10\x00\x12\x0e\n" +
 	"\n" +
-	"BED_OP_SUB\x10\x01*<\n" +
+	"BED_OP_SUB\x10\x01*R\n" +
 	"\fBedValueType\x12\x18\n" +
 	"\x14BED_VALUE_PROTECTION\x10\x00\x12\x12\n" +
-	"\x0eBED_VALUE_SEAL\x10\x01B1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
+	"\x0eBED_VALUE_SEAL\x10\x01\x12\x14\n" +
+	"\x10BED_VALUE_ENERGY\x10\x02B1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
 
 var (
 	file_bed_type_proto_rawDescOnce sync.Once

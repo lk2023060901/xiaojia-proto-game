@@ -22,6 +22,7 @@ message FieldState {
 // FarmingInfo 种田实时业务状态
 message FarmingInfo {
   repeated FieldState fields = 1;   // 当前玩家在该槽位的4块田详情
+  string uuid = 2;                  // 所有者
 }
 
 // PlayerFarmingInfo 玩家种田信息

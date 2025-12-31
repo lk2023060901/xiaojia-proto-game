@@ -26,7 +26,7 @@ type RoleType int32
 
 const (
 	RoleType_ROLE_UNKNOWN RoleType = 0
-	RoleType_STREAMER     RoleType = 1 // 主播
+	RoleType_ANCHOR       RoleType = 1 // 主播
 	RoleType_PLAYER       RoleType = 2 // 玩家
 )
 
@@ -34,12 +34,12 @@ const (
 var (
 	RoleType_name = map[int32]string{
 		0: "ROLE_UNKNOWN",
-		1: "STREAMER",
+		1: "ANCHOR",
 		2: "PLAYER",
 	}
 	RoleType_value = map[string]int32{
 		"ROLE_UNKNOWN": 0,
-		"STREAMER":     1,
+		"ANCHOR":       1,
 		"PLAYER":       2,
 	}
 )
@@ -74,7 +74,7 @@ func (RoleType) EnumDescriptor() ([]byte, []int) {
 // PlayerInfo 玩家基础信息
 type PlayerInfo struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Uid                  uint64                 `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`                                                                   // 玩家UID
+	Uuid                 string                 `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`                                                                  // 玩家UUID
 	Nickname             string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`                                                          // 昵称
 	AvatarUrl            string                 `protobuf:"bytes,3,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`                                       // 头像地址
 	AvatarFrame          uint32                 `protobuf:"varint,4,opt,name=avatar_frame,json=avatarFrame,proto3" json:"avatar_frame,omitempty"`                                // 头像框ID
@@ -118,11 +118,11 @@ func (*PlayerInfo) Descriptor() ([]byte, []int) {
 	return file_player_type_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *PlayerInfo) GetUid() uint64 {
+func (x *PlayerInfo) GetUuid() string {
 	if x != nil {
-		return x.Uid
+		return x.Uuid
 	}
-	return 0
+	return ""
 }
 
 func (x *PlayerInfo) GetNickname() string {
@@ -192,10 +192,10 @@ var File_player_type_proto protoreflect.FileDescriptor
 
 const file_player_type_proto_rawDesc = "" +
 	"\n" +
-	"\x11player_type.proto\x12\x04game\"\xc8\x02\n" +
+	"\x11player_type.proto\x12\x04game\"\xca\x02\n" +
 	"\n" +
-	"PlayerInfo\x12\x10\n" +
-	"\x03uid\x18\x01 \x01(\x04R\x03uid\x12\x1a\n" +
+	"PlayerInfo\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\tR\x04uuid\x12\x1a\n" +
 	"\bnickname\x18\x02 \x01(\tR\bnickname\x12\x1d\n" +
 	"\n" +
 	"avatar_url\x18\x03 \x01(\tR\tavatarUrl\x12!\n" +
@@ -207,10 +207,11 @@ const file_player_type_proto_rawDesc = "" +
 	"\fdecor_energy\x18\b \x01(\x03R\vdecorEnergy\x125\n" +
 	"\x17daily_vip_energy_gained\x18\t \x01(\x03R\x14dailyVipEnergyGained\x12\x19\n" +
 	"\bmodel_id\x18\n" +
-	" \x01(\rR\amodelId*6\n" +
+	" \x01(\rR\amodelId*4\n" +
 	"\bRoleType\x12\x10\n" +
-	"\fROLE_UNKNOWN\x10\x00\x12\f\n" +
-	"\bSTREAMER\x10\x01\x12\n" +
+	"\fROLE_UNKNOWN\x10\x00\x12\n" +
+	"\n" +
+	"\x06ANCHOR\x10\x01\x12\n" +
 	"\n" +
 	"\x06PLAYER\x10\x02B1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
 

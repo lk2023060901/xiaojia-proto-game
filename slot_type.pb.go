@@ -68,22 +68,200 @@ func (SlotMode) EnumDescriptor() ([]byte, []int) {
 	return file_slot_type_proto_rawDescGZIP(), []int{0}
 }
 
-// SlotInfo 槽位完整信息包装器
-type SlotInfo struct {
+// BedPkSide 竞赛 PK 阵营
+type BedPkSide int32
+
+const (
+	BedPkSide_BED_PK_SIDE_NONE       BedPkSide = 0
+	BedPkSide_BED_PK_SIDE_OWNER      BedPkSide = 1 // 擂主方
+	BedPkSide_BED_PK_SIDE_CHALLENGER BedPkSide = 2 // 挑战者方
+)
+
+// Enum value maps for BedPkSide.
+var (
+	BedPkSide_name = map[int32]string{
+		0: "BED_PK_SIDE_NONE",
+		1: "BED_PK_SIDE_OWNER",
+		2: "BED_PK_SIDE_CHALLENGER",
+	}
+	BedPkSide_value = map[string]int32{
+		"BED_PK_SIDE_NONE":       0,
+		"BED_PK_SIDE_OWNER":      1,
+		"BED_PK_SIDE_CHALLENGER": 2,
+	}
+)
+
+func (x BedPkSide) Enum() *BedPkSide {
+	p := new(BedPkSide)
+	*p = x
+	return p
+}
+
+func (x BedPkSide) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (BedPkSide) Descriptor() protoreflect.EnumDescriptor {
+	return file_slot_type_proto_enumTypes[1].Descriptor()
+}
+
+func (BedPkSide) Type() protoreflect.EnumType {
+	return &file_slot_type_proto_enumTypes[1]
+}
+
+func (x BedPkSide) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use BedPkSide.Descriptor instead.
+func (BedPkSide) EnumDescriptor() ([]byte, []int) {
+	return file_slot_type_proto_rawDescGZIP(), []int{1}
+}
+
+// SlotAction 玩家上床/下床的行为枚举
+type SlotAction int32
+
+const (
+	SlotAction_SLOT_ACTION_NONE   SlotAction = 0 // 未知
+	SlotAction_SLOT_ACTION_OCCUPY SlotAction = 1 // 占领（空床位入住）
+	SlotAction_SLOT_ACTION_SEIZE  SlotAction = 2 // 抢（主动抢夺他人床位）
+	SlotAction_SLOT_ACTION_INVITE SlotAction = 3 // 邀请（被邀请入住）
+	SlotAction_SLOT_ACTION_APPLY  SlotAction = 4 // 申请（申请入住）
+	SlotAction_SLOT_ACTION_LEAVE  SlotAction = 5 // 主动离开
+	SlotAction_SLOT_ACTION_KICKED SlotAction = 6 // 被踢（被床主踢出）
+	SlotAction_SLOT_ACTION_SEIZED SlotAction = 7 // 被抢（床位被他人抢走）
+)
+
+// Enum value maps for SlotAction.
+var (
+	SlotAction_name = map[int32]string{
+		0: "SLOT_ACTION_NONE",
+		1: "SLOT_ACTION_OCCUPY",
+		2: "SLOT_ACTION_SEIZE",
+		3: "SLOT_ACTION_INVITE",
+		4: "SLOT_ACTION_APPLY",
+		5: "SLOT_ACTION_LEAVE",
+		6: "SLOT_ACTION_KICKED",
+		7: "SLOT_ACTION_SEIZED",
+	}
+	SlotAction_value = map[string]int32{
+		"SLOT_ACTION_NONE":   0,
+		"SLOT_ACTION_OCCUPY": 1,
+		"SLOT_ACTION_SEIZE":  2,
+		"SLOT_ACTION_INVITE": 3,
+		"SLOT_ACTION_APPLY":  4,
+		"SLOT_ACTION_LEAVE":  5,
+		"SLOT_ACTION_KICKED": 6,
+		"SLOT_ACTION_SEIZED": 7,
+	}
+)
+
+func (x SlotAction) Enum() *SlotAction {
+	p := new(SlotAction)
+	*p = x
+	return p
+}
+
+func (x SlotAction) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SlotAction) Descriptor() protoreflect.EnumDescriptor {
+	return file_slot_type_proto_enumTypes[2].Descriptor()
+}
+
+func (SlotAction) Type() protoreflect.EnumType {
+	return &file_slot_type_proto_enumTypes[2]
+}
+
+func (x SlotAction) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SlotAction.Descriptor instead.
+func (SlotAction) EnumDescriptor() ([]byte, []int) {
+	return file_slot_type_proto_rawDescGZIP(), []int{2}
+}
+
+// SlotPlayerInfo 槽位玩家信息
+type SlotPlayerInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SlotId        uint32                 `protobuf:"varint,1,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"`               // 槽位编号 (1-9)
-	Owner         *PlayerInfo            `protobuf:"bytes,2,opt,name=owner,proto3" json:"owner,omitempty"`                                // 槽位所有者信息
-	Partners      []*PlayerInfo          `protobuf:"bytes,3,rep,name=partners,proto3" json:"partners,omitempty"`                          // 共同拥有者列表 (床位共享/种田同步)
-	Mode          SlotMode               `protobuf:"varint,4,opt,name=mode,proto3,enum=game.SlotMode" json:"mode,omitempty"`              // 当前显示的模式
-	BedInfo       *BedInfo               `protobuf:"bytes,5,opt,name=bed_info,json=bedInfo,proto3" json:"bed_info,omitempty"`             // 床位详细数据 (仅mode=BED有效)
-	FarmingInfo   *FarmingInfo           `protobuf:"bytes,6,opt,name=farming_info,json=farmingInfo,proto3" json:"farming_info,omitempty"` // 种田详细数据 (仅mode=FARMING有效)
+	Relationships []*PlayerRelationship  `protobuf:"bytes,1,rep,name=relationships,proto3" json:"relationships,omitempty"`
+	PlayerInfo    *PlayerInfo            `protobuf:"bytes,2,opt,name=player_info,json=playerInfo,proto3" json:"player_info,omitempty"`
+	FarmInfo      *FarmingInfo           `protobuf:"bytes,3,opt,name=farm_info,json=farmInfo,proto3" json:"farm_info,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *SlotPlayerInfo) Reset() {
+	*x = SlotPlayerInfo{}
+	mi := &file_slot_type_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SlotPlayerInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SlotPlayerInfo) ProtoMessage() {}
+
+func (x *SlotPlayerInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_slot_type_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SlotPlayerInfo.ProtoReflect.Descriptor instead.
+func (*SlotPlayerInfo) Descriptor() ([]byte, []int) {
+	return file_slot_type_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *SlotPlayerInfo) GetRelationships() []*PlayerRelationship {
+	if x != nil {
+		return x.Relationships
+	}
+	return nil
+}
+
+func (x *SlotPlayerInfo) GetPlayerInfo() *PlayerInfo {
+	if x != nil {
+		return x.PlayerInfo
+	}
+	return nil
+}
+
+func (x *SlotPlayerInfo) GetFarmInfo() *FarmingInfo {
+	if x != nil {
+		return x.FarmInfo
+	}
+	return nil
+}
+
+// SlotInfo 槽位完整信息包装器
+type SlotInfo struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	SlotId          uint32                 `protobuf:"varint,1,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"`                            // 槽位编号 (1-9)
+	Owner           *SlotPlayerInfo        `protobuf:"bytes,2,opt,name=owner,proto3" json:"owner,omitempty"`                                             // 槽位所有者信息
+	Partners        []*SlotPlayerInfo      `protobuf:"bytes,3,rep,name=partners,proto3" json:"partners,omitempty"`                                       // 共同拥有者列表 (床位共享/种田同步)
+	Mode            SlotMode               `protobuf:"varint,4,opt,name=mode,proto3,enum=game.SlotMode" json:"mode,omitempty"`                           // 当前显示的模式
+	BedInfo         *BedInfo               `protobuf:"bytes,5,opt,name=bed_info,json=bedInfo,proto3" json:"bed_info,omitempty"`                          // 床位详细数据 (仅mode=BED有效)
+	AuraCurrent     int32                  `protobuf:"varint,6,opt,name=aura_current,json=auraCurrent,proto3" json:"aura_current,omitempty"`             // 槽位当前灵气值
+	ProtectionValue uint32                 `protobuf:"varint,7,opt,name=protection_value,json=protectionValue,proto3" json:"protection_value,omitempty"` // 保护值 (大于0禁止PK挑战)
+	SealValue       uint32                 `protobuf:"varint,8,opt,name=seal_value,json=sealValue,proto3" json:"seal_value,omitempty"`                   // 封印值 (大于0收益扣除)
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
 func (x *SlotInfo) Reset() {
 	*x = SlotInfo{}
-	mi := &file_slot_type_proto_msgTypes[0]
+	mi := &file_slot_type_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -95,7 +273,7 @@ func (x *SlotInfo) String() string {
 func (*SlotInfo) ProtoMessage() {}
 
 func (x *SlotInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_slot_type_proto_msgTypes[0]
+	mi := &file_slot_type_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -108,7 +286,7 @@ func (x *SlotInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SlotInfo.ProtoReflect.Descriptor instead.
 func (*SlotInfo) Descriptor() ([]byte, []int) {
-	return file_slot_type_proto_rawDescGZIP(), []int{0}
+	return file_slot_type_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *SlotInfo) GetSlotId() uint32 {
@@ -118,14 +296,14 @@ func (x *SlotInfo) GetSlotId() uint32 {
 	return 0
 }
 
-func (x *SlotInfo) GetOwner() *PlayerInfo {
+func (x *SlotInfo) GetOwner() *SlotPlayerInfo {
 	if x != nil {
 		return x.Owner
 	}
 	return nil
 }
 
-func (x *SlotInfo) GetPartners() []*PlayerInfo {
+func (x *SlotInfo) GetPartners() []*SlotPlayerInfo {
 	if x != nil {
 		return x.Partners
 	}
@@ -146,28 +324,64 @@ func (x *SlotInfo) GetBedInfo() *BedInfo {
 	return nil
 }
 
-func (x *SlotInfo) GetFarmingInfo() *FarmingInfo {
+func (x *SlotInfo) GetAuraCurrent() int32 {
 	if x != nil {
-		return x.FarmingInfo
+		return x.AuraCurrent
 	}
-	return nil
+	return 0
+}
+
+func (x *SlotInfo) GetProtectionValue() uint32 {
+	if x != nil {
+		return x.ProtectionValue
+	}
+	return 0
+}
+
+func (x *SlotInfo) GetSealValue() uint32 {
+	if x != nil {
+		return x.SealValue
+	}
+	return 0
 }
 
 var File_slot_type_proto protoreflect.FileDescriptor
 
 const file_slot_type_proto_rawDesc = "" +
 	"\n" +
-	"\x0fslot_type.proto\x12\x04game\x1a\x11player_type.proto\x1a\x0ebed_type.proto\x1a\x12farming_type.proto\"\xfd\x01\n" +
+	"\x0fslot_type.proto\x12\x04game\x1a\x11player_type.proto\x1a\x0ebed_type.proto\x1a\x12farming_type.proto\x1a\x17relationship_type.proto\"\xb3\x01\n" +
+	"\x0eSlotPlayerInfo\x12>\n" +
+	"\rrelationships\x18\x01 \x03(\v2\x18.game.PlayerRelationshipR\rrelationships\x121\n" +
+	"\vplayer_info\x18\x02 \x01(\v2\x10.game.PlayerInfoR\n" +
+	"playerInfo\x12.\n" +
+	"\tfarm_info\x18\x03 \x01(\v2\x11.game.FarmingInfoR\bfarmInfo\"\xbc\x02\n" +
 	"\bSlotInfo\x12\x17\n" +
-	"\aslot_id\x18\x01 \x01(\rR\x06slotId\x12&\n" +
-	"\x05owner\x18\x02 \x01(\v2\x10.game.PlayerInfoR\x05owner\x12,\n" +
-	"\bpartners\x18\x03 \x03(\v2\x10.game.PlayerInfoR\bpartners\x12\"\n" +
+	"\aslot_id\x18\x01 \x01(\rR\x06slotId\x12*\n" +
+	"\x05owner\x18\x02 \x01(\v2\x14.game.SlotPlayerInfoR\x05owner\x120\n" +
+	"\bpartners\x18\x03 \x03(\v2\x14.game.SlotPlayerInfoR\bpartners\x12\"\n" +
 	"\x04mode\x18\x04 \x01(\x0e2\x0e.game.SlotModeR\x04mode\x12(\n" +
-	"\bbed_info\x18\x05 \x01(\v2\r.game.BedInfoR\abedInfo\x124\n" +
-	"\ffarming_info\x18\x06 \x01(\v2\x11.game.FarmingInfoR\vfarmingInfo*4\n" +
+	"\bbed_info\x18\x05 \x01(\v2\r.game.BedInfoR\abedInfo\x12!\n" +
+	"\faura_current\x18\x06 \x01(\x05R\vauraCurrent\x12)\n" +
+	"\x10protection_value\x18\a \x01(\rR\x0fprotectionValue\x12\x1d\n" +
+	"\n" +
+	"seal_value\x18\b \x01(\rR\tsealValue*4\n" +
 	"\bSlotMode\x12\x11\n" +
 	"\rSLOT_MODE_BED\x10\x00\x12\x15\n" +
-	"\x11SLOT_MODE_FARMING\x10\x01B1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
+	"\x11SLOT_MODE_FARMING\x10\x01*T\n" +
+	"\tBedPkSide\x12\x14\n" +
+	"\x10BED_PK_SIDE_NONE\x10\x00\x12\x15\n" +
+	"\x11BED_PK_SIDE_OWNER\x10\x01\x12\x1a\n" +
+	"\x16BED_PK_SIDE_CHALLENGER\x10\x02*\xc7\x01\n" +
+	"\n" +
+	"SlotAction\x12\x14\n" +
+	"\x10SLOT_ACTION_NONE\x10\x00\x12\x16\n" +
+	"\x12SLOT_ACTION_OCCUPY\x10\x01\x12\x15\n" +
+	"\x11SLOT_ACTION_SEIZE\x10\x02\x12\x16\n" +
+	"\x12SLOT_ACTION_INVITE\x10\x03\x12\x15\n" +
+	"\x11SLOT_ACTION_APPLY\x10\x04\x12\x15\n" +
+	"\x11SLOT_ACTION_LEAVE\x10\x05\x12\x16\n" +
+	"\x12SLOT_ACTION_KICKED\x10\x06\x12\x16\n" +
+	"\x12SLOT_ACTION_SEIZED\x10\aB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
 
 var (
 	file_slot_type_proto_rawDescOnce sync.Once
@@ -181,26 +395,32 @@ func file_slot_type_proto_rawDescGZIP() []byte {
 	return file_slot_type_proto_rawDescData
 }
 
-var file_slot_type_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_slot_type_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_slot_type_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_slot_type_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_slot_type_proto_goTypes = []any{
-	(SlotMode)(0),       // 0: game.SlotMode
-	(*SlotInfo)(nil),    // 1: game.SlotInfo
-	(*PlayerInfo)(nil),  // 2: game.PlayerInfo
-	(*BedInfo)(nil),     // 3: game.BedInfo
-	(*FarmingInfo)(nil), // 4: game.FarmingInfo
+	(SlotMode)(0),              // 0: game.SlotMode
+	(BedPkSide)(0),             // 1: game.BedPkSide
+	(SlotAction)(0),            // 2: game.SlotAction
+	(*SlotPlayerInfo)(nil),     // 3: game.SlotPlayerInfo
+	(*SlotInfo)(nil),           // 4: game.SlotInfo
+	(*PlayerRelationship)(nil), // 5: game.PlayerRelationship
+	(*PlayerInfo)(nil),         // 6: game.PlayerInfo
+	(*FarmingInfo)(nil),        // 7: game.FarmingInfo
+	(*BedInfo)(nil),            // 8: game.BedInfo
 }
 var file_slot_type_proto_depIdxs = []int32{
-	2, // 0: game.SlotInfo.owner:type_name -> game.PlayerInfo
-	2, // 1: game.SlotInfo.partners:type_name -> game.PlayerInfo
-	0, // 2: game.SlotInfo.mode:type_name -> game.SlotMode
-	3, // 3: game.SlotInfo.bed_info:type_name -> game.BedInfo
-	4, // 4: game.SlotInfo.farming_info:type_name -> game.FarmingInfo
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	5, // 0: game.SlotPlayerInfo.relationships:type_name -> game.PlayerRelationship
+	6, // 1: game.SlotPlayerInfo.player_info:type_name -> game.PlayerInfo
+	7, // 2: game.SlotPlayerInfo.farm_info:type_name -> game.FarmingInfo
+	3, // 3: game.SlotInfo.owner:type_name -> game.SlotPlayerInfo
+	3, // 4: game.SlotInfo.partners:type_name -> game.SlotPlayerInfo
+	0, // 5: game.SlotInfo.mode:type_name -> game.SlotMode
+	8, // 6: game.SlotInfo.bed_info:type_name -> game.BedInfo
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_slot_type_proto_init() }
@@ -211,13 +431,14 @@ func file_slot_type_proto_init() {
 	file_player_type_proto_init()
 	file_bed_type_proto_init()
 	file_farming_type_proto_init()
+	file_relationship_type_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_slot_type_proto_rawDesc), len(file_slot_type_proto_rawDesc)),
-			NumEnums:      1,
-			NumMessages:   1,
+			NumEnums:      3,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

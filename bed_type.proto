@@ -26,12 +26,10 @@ enum BedOpType {
 enum BedValueType {
   BED_VALUE_PROTECTION = 0;               // 保护值
   BED_VALUE_SEAL = 1;                     // 封印值
+  BED_VALUE_ENERGY = 2;                   // 装饰能量
 }
 
 // BedInfo 床位实时业务状态
 message BedInfo {
-  int32 aura_current = 1;                 // 槽位当前灵气值
-  uint32 protection_value = 2;            // 保护值 (大于0禁止PK挑战)
-  uint32 seal_value = 3;                  // 封印值 (大于0收益扣除)
-  BedPkInfo pk_info = 4;                  // PK数据 (如果为空则非PK状态)
+  BedPkInfo pk_info = 1;                  // PK数据 (如果为空则非PK状态)
 }
