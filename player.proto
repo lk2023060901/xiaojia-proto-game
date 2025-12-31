@@ -28,3 +28,22 @@ message SyncPlayerAddEnergy {
 message PlayerAddEnergyNotify {
   int64 energy = 1;       // 本次增加的能量
 }
+
+// SyncPlayerVipLevel [S2C] 同步玩家VIP等级 - 主播
+message SyncPlayerVipLevel {
+  uint32 slot_id = 1;     // 槽位编号
+  string uuid = 2;        // 玩家UUID
+  uint32 vip_level = 3;   // VIP等级
+}
+
+// PlayerVipUpLevelNotify [S2C] 玩家VIP等级提升通知 - 玩家
+message PlayerVipUpLevelNotify {
+  uint32 old_level = 1;   // 旧等级
+  uint32 new_level = 2;   // 新等级
+}
+
+// PlayerVipExpUpdateNotify [S2C] 玩家VIP经验更新通知 - 玩家
+message PlayerVipExpUpdateNotify {
+  int64 new_exp = 1;      // 新的总经验值
+  int64 add_exp = 2;      // 本次增加的经验值
+}

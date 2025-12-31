@@ -55,6 +55,13 @@ enum OpCode {
   // 玩家模型变化通知 - 玩家 [S2C]
   OP_PLAYER_CHANGE_MODEL_NOTIFY = 14; // player.proto, PlayerChangeModelNotify
 
+  // 同步玩家VIP等级 - 主播 [S2C]
+  OP_SYNC_PLAYER_VIP_LEVEL = 15;      // player.proto, SyncPlayerVipLevel
+  // 玩家VIP等级提升通知 - 玩家 [S2C]
+  OP_PLAYER_VIP_UP_LEVEL_NOTIFY = 16; // player.proto, PlayerVipUpLevelNotify
+  // 玩家VIP经验更新通知 - 玩家 [S2C]
+  OP_PLAYER_VIP_EXP_UPDATE_NOTIFY = 17; // player.proto, PlayerVipExpUpdateNotify
+
   // ============================================================
   // 槽位/床位系统 (1000-1999)
   // ============================================================
