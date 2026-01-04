@@ -362,6 +362,43 @@ func (x *ReconnectRsp) GetCode() ErrCode {
 	return ErrCode_ERR_SUCCESS
 }
 
+// InitAnchorRoomReq 初始化主播房间请求（内部使用）
+type InitAnchorRoomReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InitAnchorRoomReq) Reset() {
+	*x = InitAnchorRoomReq{}
+	mi := &file_client_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InitAnchorRoomReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InitAnchorRoomReq) ProtoMessage() {}
+
+func (x *InitAnchorRoomReq) ProtoReflect() protoreflect.Message {
+	mi := &file_client_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InitAnchorRoomReq.ProtoReflect.Descriptor instead.
+func (*InitAnchorRoomReq) Descriptor() ([]byte, []int) {
+	return file_client_proto_rawDescGZIP(), []int{8}
+}
+
 var File_client_proto protoreflect.FileDescriptor
 
 const file_client_proto_rawDesc = "" +
@@ -382,7 +419,8 @@ const file_client_proto_rawDesc = "" +
 	"\fReconnectReq\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\"1\n" +
 	"\fReconnectRsp\x12!\n" +
-	"\x04code\x18\x01 \x01(\x0e2\r.game.ErrCodeR\x04codeB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
+	"\x04code\x18\x01 \x01(\x0e2\r.game.ErrCodeR\x04code\"\x13\n" +
+	"\x11InitAnchorRoomReqB1Z/github.com/lk2023060901/xiaojia-proto-game;gameb\x06proto3"
 
 var (
 	file_client_proto_rawDescOnce sync.Once
@@ -396,7 +434,7 @@ func file_client_proto_rawDescGZIP() []byte {
 	return file_client_proto_rawDescData
 }
 
-var file_client_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_client_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_client_proto_goTypes = []any{
 	(*AnchorLoadCompletedReq)(nil), // 0: game.AnchorLoadCompletedReq
 	(*AnchorLoadCompletedRsp)(nil), // 1: game.AnchorLoadCompletedRsp
@@ -406,10 +444,11 @@ var file_client_proto_goTypes = []any{
 	(*HeartbeatRsp)(nil),           // 5: game.HeartbeatRsp
 	(*ReconnectReq)(nil),           // 6: game.ReconnectReq
 	(*ReconnectRsp)(nil),           // 7: game.ReconnectRsp
-	(ErrCode)(0),                   // 8: game.ErrCode
+	(*InitAnchorRoomReq)(nil),      // 8: game.InitAnchorRoomReq
+	(ErrCode)(0),                   // 9: game.ErrCode
 }
 var file_client_proto_depIdxs = []int32{
-	8, // 0: game.ReconnectRsp.code:type_name -> game.ErrCode
+	9, // 0: game.ReconnectRsp.code:type_name -> game.ErrCode
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -429,7 +468,7 @@ func file_client_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_client_proto_rawDesc), len(file_client_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

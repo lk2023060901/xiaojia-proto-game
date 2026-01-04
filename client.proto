@@ -60,3 +60,10 @@ message ReconnectRsp {
   // 错误码
   ErrCode code = 1;
 }
+
+// ============================================================
+// 内部消息 (Gateway -> Game)
+// ============================================================
+
+// InitAnchorRoomReq 初始化主播房间请求（内部使用）
+message InitAnchorRoomReq {}

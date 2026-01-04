@@ -53,11 +53,28 @@ const (
 	// 断线重连（Client -> Gateway）
 	OpCode_OP_RECONNECT_REQ OpCode = 7 // client.proto, ReconnectReq
 	OpCode_OP_RECONNECT_RSP OpCode = 8 // client.proto, ReconnectRsp
-	// 同步玩家模型变化 [S2C]
-	OpCode_OP_SYNC_PLAYER_MODEL OpCode = 9 // player.proto, SyncPlayerModel
+	// 同步玩家模型变化 - 主播 [S2C]
+	OpCode_OP_SYNC_PLAYER_CHANGE_MODEL OpCode = 9 // player.proto, SyncPlayerChangeModel
 	// 玩家资源加载完成（Client -> Gateway）
 	OpCode_OP_PLAYER_LOAD_COMPLETED_REQ OpCode = 10 // client.proto, PlayerLoadCompletedReq
 	OpCode_OP_PLAYER_LOAD_COMPLETED_RSP OpCode = 11 // client.proto, PlayerLoadCompletedRsp
+	// 同步玩家能量增加 - 主播 [S2C]
+	OpCode_OP_SYNC_PLAYER_ADD_ENERGY OpCode = 12 // player.proto, SyncPlayerAddEnergy
+	// 玩家能量增加通知 - 玩家 [S2C]
+	OpCode_OP_PLAYER_ADD_ENERGY_NOTIFY OpCode = 13 // player.proto, PlayerAddEnergyNotify
+	// 玩家模型变化通知 - 玩家 [S2C]
+	OpCode_OP_PLAYER_CHANGE_MODEL_NOTIFY OpCode = 14 // player.proto, PlayerChangeModelNotify
+	// 同步玩家VIP等级 - 主播 [S2C]
+	OpCode_OP_SYNC_PLAYER_VIP_LEVEL OpCode = 15 // player.proto, SyncPlayerVipLevel
+	// 玩家VIP等级提升通知 - 玩家 [S2C]
+	OpCode_OP_PLAYER_VIP_UP_LEVEL_NOTIFY OpCode = 16 // player.proto, PlayerVipUpLevelNotify
+	// 玩家VIP经验更新通知 - 玩家 [S2C]
+	OpCode_OP_PLAYER_VIP_EXP_UPDATE_NOTIFY OpCode = 17 // player.proto, PlayerVipExpUpdateNotify
+	// 刷新 Token (Client <-> Gateway)
+	OpCode_OP_REFRESH_TOKEN_REQ OpCode = 18
+	OpCode_OP_REFRESH_TOKEN_RSP OpCode = 19
+	// 内部操作码 (Gateway -> Game)
+	OpCode_OP_INIT_ANCHOR_ROOM OpCode = 50 // 初始化主播房间
 	// 同步所有槽位信息 [S2C]
 	OpCode_OP_SYNC_ANCHOR_SLOTS OpCode = 1000 // slot.proto, SyncAnchorSlots
 	// 同步单个槽位信息 [S2C]
@@ -146,9 +163,18 @@ var (
 		6:    "OP_HEARTBEAT_RSP",
 		7:    "OP_RECONNECT_REQ",
 		8:    "OP_RECONNECT_RSP",
-		9:    "OP_SYNC_PLAYER_MODEL",
+		9:    "OP_SYNC_PLAYER_CHANGE_MODEL",
 		10:   "OP_PLAYER_LOAD_COMPLETED_REQ",
 		11:   "OP_PLAYER_LOAD_COMPLETED_RSP",
+		12:   "OP_SYNC_PLAYER_ADD_ENERGY",
+		13:   "OP_PLAYER_ADD_ENERGY_NOTIFY",
+		14:   "OP_PLAYER_CHANGE_MODEL_NOTIFY",
+		15:   "OP_SYNC_PLAYER_VIP_LEVEL",
+		16:   "OP_PLAYER_VIP_UP_LEVEL_NOTIFY",
+		17:   "OP_PLAYER_VIP_EXP_UPDATE_NOTIFY",
+		18:   "OP_REFRESH_TOKEN_REQ",
+		19:   "OP_REFRESH_TOKEN_RSP",
+		50:   "OP_INIT_ANCHOR_ROOM",
 		1000: "OP_SYNC_ANCHOR_SLOTS",
 		1001: "OP_SYNC_ANCHOR_SLOT",
 		1002: "OP_SYNC_BED_VALUE",
@@ -188,55 +214,64 @@ var (
 		8000: "OP_SYNC_BROADCAST",
 	}
 	OpCode_value = map[string]int32{
-		"OP_NONE":                       0,
-		"OP_AUTH_REQ":                   1,
-		"OP_AUTH_RSP":                   2,
-		"OP_ANCHOR_LOAD_COMPLETED_REQ":  3,
-		"OP_ANCHOR_LOAD_COMPLETED_RSP":  4,
-		"OP_HEARTBEAT_REQ":              5,
-		"OP_HEARTBEAT_RSP":              6,
-		"OP_RECONNECT_REQ":              7,
-		"OP_RECONNECT_RSP":              8,
-		"OP_SYNC_PLAYER_MODEL":          9,
-		"OP_PLAYER_LOAD_COMPLETED_REQ":  10,
-		"OP_PLAYER_LOAD_COMPLETED_RSP":  11,
-		"OP_SYNC_ANCHOR_SLOTS":          1000,
-		"OP_SYNC_ANCHOR_SLOT":           1001,
-		"OP_SYNC_BED_VALUE":             1002,
-		"OP_SYNC_SLOT_MODEL":            1003,
-		"OP_SYNC_SLOT_ADD_PLAYER":       1004,
-		"OP_SYNC_SLOT_REMOVE_PLAYER":    1005,
-		"OP_SYNC_PK_SCORE":              1006,
-		"OP_SYNC_PK_GIFT_COOLDOWN":      1007,
-		"OP_SYNC_PK_START":              1008,
-		"OP_SYNC_PK_SETTLEMENT":         1009,
-		"OP_SYNC_GIFT":                  1010,
-		"OP_SYNC_FARMING_ROUND":         2000,
-		"OP_SYNC_FARMING_FIELD":         2001,
-		"OP_PLANTING_REQ":               2002,
-		"OP_PLANTING_RES":               2003,
-		"OP_SYNC_PLANTING_SETTLEMENT":   2004,
-		"OP_PLANTING_SETTLEMENT_NOTIFY": 2005,
-		"OP_SYNC_STORE_GOODS":           3000,
-		"OP_SYNC_STORE_GOODS_ITEM":      3001,
-		"OP_BUY_STORE_GOODS_REQ":        3002,
-		"OP_BUY_STORE_GOODS_RES":        3003,
-		"OP_SYNC_COMP_VOTING":           4000,
-		"OP_SYNC_COMP_VOTE_UPDATE":      4001,
-		"OP_SYNC_COMP_STAGE":            4002,
-		"OP_SYNC_COMP_SIGNUP":           4003,
-		"OP_SYNC_COMP_PK":               4004,
-		"OP_SYNC_COMP_PK_SCORE":         4005,
-		"OP_SYNC_COMP_SETTLEMENT":       4006,
-		"OP_GET_RANK_REQ":               5000,
-		"OP_SYNC_RANK":                  5001,
-		"OP_SYNC_ANCHOR_INFO":           6000,
-		"OP_SWITCH_ANCHOR_SCENE_REQ":    6001,
-		"OP_SWITCH_ANCHOR_SCENE_RES":    6002,
-		"OP_SYNC_PLAYER_RELATIONSHIPS":  7000,
-		"OP_SYNC_RELATIONSHIP_UPDATE":   7001,
-		"OP_SYNC_SLOT_RELATIONSHIP":     7002,
-		"OP_SYNC_BROADCAST":             8000,
+		"OP_NONE":                         0,
+		"OP_AUTH_REQ":                     1,
+		"OP_AUTH_RSP":                     2,
+		"OP_ANCHOR_LOAD_COMPLETED_REQ":    3,
+		"OP_ANCHOR_LOAD_COMPLETED_RSP":    4,
+		"OP_HEARTBEAT_REQ":                5,
+		"OP_HEARTBEAT_RSP":                6,
+		"OP_RECONNECT_REQ":                7,
+		"OP_RECONNECT_RSP":                8,
+		"OP_SYNC_PLAYER_CHANGE_MODEL":     9,
+		"OP_PLAYER_LOAD_COMPLETED_REQ":    10,
+		"OP_PLAYER_LOAD_COMPLETED_RSP":    11,
+		"OP_SYNC_PLAYER_ADD_ENERGY":       12,
+		"OP_PLAYER_ADD_ENERGY_NOTIFY":     13,
+		"OP_PLAYER_CHANGE_MODEL_NOTIFY":   14,
+		"OP_SYNC_PLAYER_VIP_LEVEL":        15,
+		"OP_PLAYER_VIP_UP_LEVEL_NOTIFY":   16,
+		"OP_PLAYER_VIP_EXP_UPDATE_NOTIFY": 17,
+		"OP_REFRESH_TOKEN_REQ":            18,
+		"OP_REFRESH_TOKEN_RSP":            19,
+		"OP_INIT_ANCHOR_ROOM":             50,
+		"OP_SYNC_ANCHOR_SLOTS":            1000,
+		"OP_SYNC_ANCHOR_SLOT":             1001,
+		"OP_SYNC_BED_VALUE":               1002,
+		"OP_SYNC_SLOT_MODEL":              1003,
+		"OP_SYNC_SLOT_ADD_PLAYER":         1004,
+		"OP_SYNC_SLOT_REMOVE_PLAYER":      1005,
+		"OP_SYNC_PK_SCORE":                1006,
+		"OP_SYNC_PK_GIFT_COOLDOWN":        1007,
+		"OP_SYNC_PK_START":                1008,
+		"OP_SYNC_PK_SETTLEMENT":           1009,
+		"OP_SYNC_GIFT":                    1010,
+		"OP_SYNC_FARMING_ROUND":           2000,
+		"OP_SYNC_FARMING_FIELD":           2001,
+		"OP_PLANTING_REQ":                 2002,
+		"OP_PLANTING_RES":                 2003,
+		"OP_SYNC_PLANTING_SETTLEMENT":     2004,
+		"OP_PLANTING_SETTLEMENT_NOTIFY":   2005,
+		"OP_SYNC_STORE_GOODS":             3000,
+		"OP_SYNC_STORE_GOODS_ITEM":        3001,
+		"OP_BUY_STORE_GOODS_REQ":          3002,
+		"OP_BUY_STORE_GOODS_RES":          3003,
+		"OP_SYNC_COMP_VOTING":             4000,
+		"OP_SYNC_COMP_VOTE_UPDATE":        4001,
+		"OP_SYNC_COMP_STAGE":              4002,
+		"OP_SYNC_COMP_SIGNUP":             4003,
+		"OP_SYNC_COMP_PK":                 4004,
+		"OP_SYNC_COMP_PK_SCORE":           4005,
+		"OP_SYNC_COMP_SETTLEMENT":         4006,
+		"OP_GET_RANK_REQ":                 5000,
+		"OP_SYNC_RANK":                    5001,
+		"OP_SYNC_ANCHOR_INFO":             6000,
+		"OP_SWITCH_ANCHOR_SCENE_REQ":      6001,
+		"OP_SWITCH_ANCHOR_SCENE_RES":      6002,
+		"OP_SYNC_PLAYER_RELATIONSHIPS":    7000,
+		"OP_SYNC_RELATIONSHIP_UPDATE":     7001,
+		"OP_SYNC_SLOT_RELATIONSHIP":       7002,
+		"OP_SYNC_BROADCAST":               8000,
 	}
 )
 
@@ -271,8 +306,7 @@ var File_op_code_proto protoreflect.FileDescriptor
 
 const file_op_code_proto_rawDesc = "" +
 	"\n" +
-	"\rop_code.proto\x12\x04game*\xad\n" +
-	"\n" +
+	"\rop_code.proto\x12\x04game*\xca\f\n" +
 	"\x06OpCode\x12\v\n" +
 	"\aOP_NONE\x10\x00\x12\x0f\n" +
 	"\vOP_AUTH_REQ\x10\x01\x12\x0f\n" +
@@ -282,11 +316,20 @@ const file_op_code_proto_rawDesc = "" +
 	"\x10OP_HEARTBEAT_REQ\x10\x05\x12\x14\n" +
 	"\x10OP_HEARTBEAT_RSP\x10\x06\x12\x14\n" +
 	"\x10OP_RECONNECT_REQ\x10\a\x12\x14\n" +
-	"\x10OP_RECONNECT_RSP\x10\b\x12\x18\n" +
-	"\x14OP_SYNC_PLAYER_MODEL\x10\t\x12 \n" +
+	"\x10OP_RECONNECT_RSP\x10\b\x12\x1f\n" +
+	"\x1bOP_SYNC_PLAYER_CHANGE_MODEL\x10\t\x12 \n" +
 	"\x1cOP_PLAYER_LOAD_COMPLETED_REQ\x10\n" +
 	"\x12 \n" +
-	"\x1cOP_PLAYER_LOAD_COMPLETED_RSP\x10\v\x12\x19\n" +
+	"\x1cOP_PLAYER_LOAD_COMPLETED_RSP\x10\v\x12\x1d\n" +
+	"\x19OP_SYNC_PLAYER_ADD_ENERGY\x10\f\x12\x1f\n" +
+	"\x1bOP_PLAYER_ADD_ENERGY_NOTIFY\x10\r\x12!\n" +
+	"\x1dOP_PLAYER_CHANGE_MODEL_NOTIFY\x10\x0e\x12\x1c\n" +
+	"\x18OP_SYNC_PLAYER_VIP_LEVEL\x10\x0f\x12!\n" +
+	"\x1dOP_PLAYER_VIP_UP_LEVEL_NOTIFY\x10\x10\x12#\n" +
+	"\x1fOP_PLAYER_VIP_EXP_UPDATE_NOTIFY\x10\x11\x12\x18\n" +
+	"\x14OP_REFRESH_TOKEN_REQ\x10\x12\x12\x18\n" +
+	"\x14OP_REFRESH_TOKEN_RSP\x10\x13\x12\x17\n" +
+	"\x13OP_INIT_ANCHOR_ROOM\x102\x12\x19\n" +
 	"\x14OP_SYNC_ANCHOR_SLOTS\x10\xe8\a\x12\x18\n" +
 	"\x13OP_SYNC_ANCHOR_SLOT\x10\xe9\a\x12\x16\n" +
 	"\x11OP_SYNC_BED_VALUE\x10\xea\a\x12\x17\n" +

@@ -62,6 +62,13 @@ enum OpCode {
   // 玩家VIP经验更新通知 - 玩家 [S2C]
   OP_PLAYER_VIP_EXP_UPDATE_NOTIFY = 17; // player.proto, PlayerVipExpUpdateNotify
 
+  // 刷新 Token (Client <-> Gateway)
+  OP_REFRESH_TOKEN_REQ = 18;
+  OP_REFRESH_TOKEN_RSP = 19;
+
+  // 内部操作码 (Gateway -> Game)
+  OP_INIT_ANCHOR_ROOM = 50;   // 初始化主播房间
+
   // ============================================================
   // 槽位/床位系统 (1000-1999)
   // ============================================================
